@@ -1,12 +1,23 @@
 package org.techtown.notepad.new_memo;
 
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -29,6 +40,9 @@ import com.bumptech.glide.request.target.Target;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -36,6 +50,7 @@ public class NewMemoFragment extends Fragment {
     EditText title, content, URL;
     static NewMemoFragment mFragment;
     LinearLayout image_preview;
+    File file;
 
     // 현재 노트에 첨부한 로컬사진의 byte to string 형식과 url 링크 저장
     ArrayList<String> pics = new ArrayList<>();
@@ -78,7 +93,9 @@ public class NewMemoFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent,101);
             }
         });
 
@@ -86,7 +103,16 @@ public class NewMemoFragment extends Fragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(file == null){
+                    String filename = "temp.jpg";
+                    File storageDir = Environment.getExternalStorageDirectory();
+                    file = new File(storageDir,filename);
+                }
 
+                Uri fileUri = FileProvider.getUriForFile(getContext(),"org.techtown.notepad.intent.fileprovider",file);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+                startActivityForResult(intent,103);
             }
         });
 
@@ -125,6 +151,117 @@ public class NewMemoFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 101){
+            Uri file;
+            Bitmap image;
+
+            file = data.getData();
+
+            String[] filePath = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContext().getContentResolver().query(file, filePath, null, null, null);
+            cursor.moveToFirst();
+            String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+            cursor.close();
+
+            ExifInterface exif = null;
+            try{
+                exif = new ExifInterface(imagePath);
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+
+            // 사진이 회전 되어있다면 정방향으로 돌리고, 사진을 String 형태로 전환
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
+            image = BitmapFactory.decodeFile(imagePath);
+            image = rotate(image, exifOrientationToDegrees(orientation));
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            byte[] byteArray = bytes.toByteArray();
+            String pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
+
+            // 이미지 미리보기 띄우기
+            ImageView imageView = new ImageView(getContext());
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
+            imageView.setLayoutParams(params);
+            imageView.setImageBitmap(image);
+            image_preview.addView(imageView);
+
+            // 사진 string을 어레이 리스트에 저장
+            num_of_pics++;
+            pics.add("pic"+(num_of_pics+num_of_urls)+"_"+pic);
+        }
+
+        if(requestCode == 103){
+            Bitmap image = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            byte[] byteArray = bytes.toByteArray();
+            String pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
+
+            // 이미지 미리보기 띄우기
+            ImageView imageView = new ImageView(getContext());
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
+            imageView.setLayoutParams(params);
+            imageView.setImageBitmap(image);
+            image_preview.addView(imageView);
+
+            // 사진 string을 어레이 리스트에 저장
+            num_of_pics++;
+            pics.add("pic"+(num_of_pics+num_of_urls)+"_"+pic);
+        }
+    }
+
+    public int exifOrientationToDegrees(int exifOrientation)
+    {
+        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90)
+        {
+            return 90;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180)
+        {
+            return 180;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_270)
+        {
+            return 270;
+        }
+        return 0;
+    }
+
+    public Bitmap rotate(Bitmap bitmap, int degrees)
+    {
+        if(degrees != 0 && bitmap != null)
+        {
+            Matrix m = new Matrix();
+            m.setRotate(degrees, (float) bitmap.getWidth() / 2,
+                    (float) bitmap.getHeight() / 2);
+
+            try
+            {
+                Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0,
+                        bitmap.getWidth(), bitmap.getHeight(), m, true);
+                if(bitmap != converted)
+                {
+                    bitmap.recycle();
+                    bitmap = converted;
+                }
+            }
+            catch(OutOfMemoryError ex)
+            {
+            }
+        }
+        return bitmap;
     }
 
 }

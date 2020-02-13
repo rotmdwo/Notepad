@@ -48,7 +48,7 @@ public class SaveBoxFragment extends Fragment {
                 String title = ((NewMemoFragment)NewMemoFragment.mFragment).title.getText().toString();
                 String content = ((NewMemoFragment)NewMemoFragment.mFragment).content.getText().toString();
 
-                saveNote(title,content,(NewMemoFragment.mFragment).URLs);
+                saveNote(title,content,(NewMemoFragment.mFragment).pics, (NewMemoFragment.mFragment).URLs);
                 Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
@@ -57,7 +57,7 @@ public class SaveBoxFragment extends Fragment {
         return rootView;
     }
 
-    private void saveNote(String title, String content, ArrayList<String>URLs){
+    private void saveNote(String title, String content, ArrayList<String>pics, ArrayList<String>URLs){
         // 현재 시간을 메모를 구분하는 이름으로 추가
         Set<String> names = restoreNames();
         Date time = new Date();
@@ -69,8 +69,11 @@ public class SaveBoxFragment extends Fragment {
         Set<String> note = new HashSet<>();
         note.add("title_"+title);
         note.add("content_"+content);
-        for(int i = 0 ; i < URLs.size();i++){  // 형식에 맞춘 URL들을 첨부해준다.  --> 형식: URLn_https:// ...
+        for(int i = 0 ; i < URLs.size() ; i++){  // 형식에 맞춘 URL들을 첨부해준다.  --> 형식: URLn_https:// ...
             note.add(URLs.get(i));
+        }
+        for(int j = 0; j < pics.size() ; j++){
+            note.add(pics.get(j));
         }
 
         // Shared Prefrences 저장
