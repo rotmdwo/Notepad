@@ -213,6 +213,7 @@ public class NewMemoFragment extends Fragment {
             int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
             imageView.setLayoutParams(params);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setImageBitmap(image);
             image_preview.addView(imageView);
 

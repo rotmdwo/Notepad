@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
             if(URLs_array.length != 0 && URLs_array[0].substring(3,5).equals("1_")){  // URL 이미지가 1번일 때
                 int _location = URLs_array[0].indexOf('_');
-                adapter.addListItem(new list_item(true,URLs_array[0].substring(_location+1),title,content));
+                adapter.addListItem(new list_item(true,URLs_array[0].substring(_location+1),title,content,name));
             } else if(pics_array.length != 0 && pics_array[0].substring(3,5).equals("1_")){ // 로컬 이미지가 1번일 때
                 int _location = pics_array[0].indexOf('_');
-                adapter.addListItem(new list_item(false,pics_array[0].substring(_location+1),title,content));
+                adapter.addListItem(new list_item(false,pics_array[0].substring(_location+1),title,content,name));
             } else if(URLs_array.length == 0 && pics_array.length == 0){  // 첨부된 이미지가 없을 때
-                adapter.addListItem(new list_item(false,"NO",title,content));
+                adapter.addListItem(new list_item(false,"NO",title,content,name));
             }
 
             recyclerView.setAdapter(adapter);

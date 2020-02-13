@@ -5,12 +5,14 @@ public class list_item {
     String image_path;
     String title;
     String content;
+    String time;
 
-    public list_item(Boolean isWebImage, String image_path, String title, String content) {
+    public list_item(Boolean isWebImage, String image_path, String title, String content, String time) {
         this.isWebImage = isWebImage;
         this.image_path = image_path;
         this.title = title;
         this.content = content;
+        this.time = time;
     }
 
     public Boolean getWebImage() {
@@ -43,5 +45,13 @@ public class list_item {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

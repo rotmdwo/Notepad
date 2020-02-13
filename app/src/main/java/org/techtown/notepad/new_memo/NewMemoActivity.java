@@ -10,7 +10,6 @@ import android.widget.EditText;
 import org.techtown.notepad.R;
 
 public class NewMemoActivity extends AppCompatActivity {
-    EditText editText, editText2;
     FragmentManager manager;
     BackBoxFragment frg_backbox;
     SaveBoxFragment frg_savebox;
@@ -21,9 +20,6 @@ public class NewMemoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_memo);
         mContext = this;
-
-        editText = findViewById(R.id.title);
-        editText2 = findViewById(R.id.content);
 
         manager= getSupportFragmentManager();
         frg_newmemo = new NewMemoFragment();

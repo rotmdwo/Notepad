@@ -1,6 +1,7 @@
 package org.techtown.notepad.list;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ import com.bumptech.glide.request.target.Target;
 
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
+import org.techtown.notepad.view_modify.view_modifyActivity;
 
 import java.util.ArrayList;
 
@@ -70,6 +73,18 @@ public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.Vi
             imageView = itemView.findViewById(R.id.thumbnail);
             textView = itemView.findViewById(R.id.title);
             textView2 = itemView.findViewById(R.id.content);
+
+            itemView.setOnClickListener(new View.OnClickListener() {  // 리스트에서 노트를 선택하면 뷰창을 엶.
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition() ;
+                    Intent intent = new Intent(MainActivity.mContext, view_modifyActivity.class);
+                    intent.putExtra("title",items.get(pos).getTitle());
+                    intent.putExtra("content",items.get(pos).getContent());
+                    intent.putExtra("name",items.get(pos).getTime());
+                    MainActivity.mContext.startActivity(intent);
+                }
+            });
 
         }
 
