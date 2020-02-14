@@ -49,7 +49,9 @@ public class ViewFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() { // 뒤로가기 눌렀을 때
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
@@ -57,7 +59,7 @@ public class ViewFragment extends Fragment {
         modify_delete.setOnClickListener(new View.OnClickListener() { // 우측상단 ... 버튼 눌렀을 때
             @Override
             public void onClick(View v) {
-
+                ((view_modifyActivity)view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity)view_modifyActivity.mContext).frg_modifybox).commit();
             }
         });
 

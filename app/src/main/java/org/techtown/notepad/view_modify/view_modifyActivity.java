@@ -13,6 +13,8 @@ public class view_modifyActivity extends AppCompatActivity {
     FragmentManager manager;
     ViewFragment frg_view;
     ModifyFragment frg_modify;
+    ModifyBoxFragment frg_modifybox;
+    DeleteBoxFragment frg_deletebox;
 
     public static Context mContext;
     @Override
@@ -25,7 +27,10 @@ public class view_modifyActivity extends AppCompatActivity {
         manager= getSupportFragmentManager();
         frg_view = new ViewFragment();
         frg_modify = new ModifyFragment();
+        frg_modifybox = new ModifyBoxFragment();
+        frg_deletebox = new DeleteBoxFragment();
 
-        manager.beginTransaction().add(R.id.frameLayout,frg_view).add(R.id.frameLayout,frg_modify).hide(frg_modify).commit();
+        manager.beginTransaction().add(R.id.frameLayout,frg_view).add(R.id.frameLayout,frg_modifybox).hide(frg_modifybox).add(R.id.frameLayout,frg_modify)
+                .hide(frg_modify).add(R.id.frameLayout,frg_deletebox).hide(frg_deletebox).commit();
     }
 }
