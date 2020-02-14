@@ -2,6 +2,7 @@ package org.techtown.notepad.new_memo;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 
 import java.text.SimpleDateFormat;
@@ -50,7 +52,10 @@ public class SaveBoxFragment extends Fragment {
 
                 saveNote(title,content,(NewMemoFragment.mFragment).pics, (NewMemoFragment.mFragment).URLs);
                 Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
-                getActivity().finish();
+
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
