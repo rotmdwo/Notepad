@@ -45,6 +45,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class NewMemoFragment extends Fragment {
     EditText title, content, URL;
@@ -195,8 +197,10 @@ public class NewMemoFragment extends Fragment {
 
         String pic = null;
         Bitmap image = null;
+        ExifInterface exif = null;
+        String imagePath = null;
 
-        if(requestCode == 101){  // 사진첨부 처리부분
+        if(requestCode == 101 && resultCode == RESULT_OK){  // 사진첨부 처리부분
             Uri file;
 
             file = data.getData();
@@ -204,10 +208,15 @@ public class NewMemoFragment extends Fragment {
             String[] filePath = { MediaStore.Images.Media.DATA };
             Cursor cursor = getContext().getContentResolver().query(file, filePath, null, null, null);
             cursor.moveToFirst();
-            String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+            imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
             cursor.close();
+        }
 
-            ExifInterface exif = null;
+        if(requestCode == 103 && resultCode == RESULT_OK){  // 사진찍기 처리부분
+            imagePath = file.getAbsolutePath();
+        }
+
+        if((requestCode == 101 || requestCode == 103) && resultCode == RESULT_OK){  // 사진첨부와 사진찍기의 공통된 처리부분
             try{
                 exif = new ExifInterface(imagePath);
             } catch(IOException e){
@@ -218,22 +227,12 @@ public class NewMemoFragment extends Fragment {
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
             image = BitmapFactory.decodeFile(imagePath);
             image = rotate(image, exifOrientationToDegrees(orientation));
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            byte[] byteArray = bytes.toByteArray();
-            pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
-        }
-
-        if(requestCode == 103){  // 사진찍기 처리부분
-            image = BitmapFactory.decodeFile(file.getAbsolutePath());
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             byte[] byteArray = bytes.toByteArray();
             pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
-        }
 
-        if(requestCode == 101 || requestCode == 103){  // 사진첨부와 사진찍기의 공통된 처리부분
             // 이미지 미리보기 띄우기
             ImageView imageView = new ImageView(getContext());
             int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
