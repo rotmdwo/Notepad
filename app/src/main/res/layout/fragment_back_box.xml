@@ -15,7 +15,7 @@
             android:id="@+id/back_box"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:background="#88CBD3D8"
+            android:background="#FFC7E9"
             android:clickable="true"
             android:orientation="vertical"
             android:padding="30dp"
@@ -43,15 +43,27 @@
                     android:id="@+id/exit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="나가기" />
+                    android:layout_marginLeft="15dp"
+                    android:background="#88FF69B4"
+                    android:text="나가기"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/keep_writing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="계속작성" />
+                    android:layout_marginRight="15dp"
+                    android:background="#88FF69B4"
+                    android:text="계속작성"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
