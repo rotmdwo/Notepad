@@ -1,4 +1,4 @@
-package org.techtown.notepad.new_memo;
+package org.techtown.notepad.view_modify;
 
 
 import android.app.Activity;
@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
+import org.techtown.notepad.new_memo.NewMemoActivity;
+import org.techtown.notepad.new_memo.NewMemoFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,33 +25,36 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-
-public class SaveBoxFragment extends Fragment {
-    SaveBoxFragment saveBoxFragment;
+public class SaveBoxFragment2 extends Fragment {
+    SaveBoxFragment2 mFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_save_box, container, false);
-
-        saveBoxFragment = this;
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_save_box_fragment2, container, false);
+        mFragment = this;
 
         Button cancel = rootView.findViewById(R.id.cancel);
         Button confirm = rootView.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {  // 저장 취소
             @Override
             public void onClick(View v) {
-                ((NewMemoActivity) NewMemoActivity.mContext).manager.beginTransaction().hide(saveBoxFragment).commit();
+                ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().hide(mFragment).commit();
             }
         });
 
         confirm.setOnClickListener(new View.OnClickListener() {  // 내용 저장
             @Override
             public void onClick(View v) {
-                String title = ((NewMemoFragment)NewMemoFragment.mFragment).title.getText().toString();
-                String content = ((NewMemoFragment)NewMemoFragment.mFragment).content.getText().toString();
+                String title = ModifyFragment.mFragment.title.getText().toString();
+                String content = ModifyFragment.mFragment.content.getText().toString();
 
-                saveNote(title,content,(NewMemoFragment.mFragment).pics, (NewMemoFragment.mFragment).URLs);
+                // 기존에 저장되어 있던 내용을 삭제
+                String name = deleteName();
+                deleteNote(name);
+
+                // 수정하는 시간을 Key값으로 새로운 내용을 저장
+                saveNote(title,content,(ModifyFragment.mFragment).pics, (ModifyFragment.mFragment).URLs);
                 Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getContext(), MainActivity.class);
@@ -61,7 +66,7 @@ public class SaveBoxFragment extends Fragment {
         return rootView;
     }
 
-    private void saveNote(String title, String content, ArrayList<String>pics, ArrayList<String>URLs){
+    private void saveNote(String title, String content, ArrayList<String> pics, ArrayList<String>URLs){
         // 현재 시간을 메모를 구분하는 이름으로 추가
         Set<String> names = restoreNames();
         Date time = new Date();
@@ -94,4 +99,27 @@ public class SaveBoxFragment extends Fragment {
         return pref.getStringSet("names",defValues);
     }
 
+    private String deleteName(){  // 노트 리스트에서 기존 작성했던 노트이름(마지막 수정시간)을 삭제
+        Intent intent = getActivity().getIntent();
+        String name = intent.getStringExtra("name");
+        Set<String> allNoteNmaes = restoreNames();
+        allNoteNmaes.remove(name);
+        saveNames(allNoteNmaes);
+        return name;
+    }
+
+    private void deleteNote(String name) {  // 저장되어 있는 노트 삭제
+        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove(name);
+        editor.commit();
+    }
+
+    private void saveNames(Set<String> names){
+        // Shared Prefrences 저장
+        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putStringSet("names",names);
+        editor.commit();
+    }
 }

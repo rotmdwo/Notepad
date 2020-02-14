@@ -59,7 +59,7 @@ public class DeleteBoxFragment extends Fragment {
         return rootView;
     }
 
-    protected void deleteNote(String name) {  // 저장되어 있는 노트 삭제
+    private void deleteNote(String name) {  // 저장되어 있는 노트 삭제
         SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.remove(name);

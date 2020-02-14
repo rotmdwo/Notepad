@@ -1,6 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -41,7 +42,8 @@ public class ModifyBoxFragment extends Fragment {
         modify_button.setOnClickListener(new View.OnClickListener() {  // 수정버튼 클릭
             @Override
             public void onClick(View v) {
-
+                ((view_modifyActivity)view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity)view_modifyActivity.mContext).frg_modify)
+                        .hide(mFragment).hide(((view_modifyActivity)view_modifyActivity.mContext).frg_view).commit();
             }
         });
         return rootView;

@@ -15,6 +15,8 @@ public class view_modifyActivity extends AppCompatActivity {
     ModifyFragment frg_modify;
     ModifyBoxFragment frg_modifybox;
     DeleteBoxFragment frg_deletebox;
+    BackBoxFragment2 frg_backbox2;
+    SaveBoxFragment2 frg_savebox2;
 
     public static Context mContext;
     @Override
@@ -29,8 +31,10 @@ public class view_modifyActivity extends AppCompatActivity {
         frg_modify = new ModifyFragment();
         frg_modifybox = new ModifyBoxFragment();
         frg_deletebox = new DeleteBoxFragment();
+        frg_backbox2 = new BackBoxFragment2();
+        frg_savebox2 = new SaveBoxFragment2();
 
         manager.beginTransaction().add(R.id.frameLayout,frg_view).add(R.id.frameLayout,frg_modifybox).hide(frg_modifybox).add(R.id.frameLayout,frg_modify)
-                .hide(frg_modify).add(R.id.frameLayout,frg_deletebox).hide(frg_deletebox).commit();
+                .hide(frg_modify).add(R.id.frameLayout,frg_deletebox).hide(frg_deletebox).add(R.id.frameLayout,frg_backbox2).hide(frg_backbox2).add(R.id.frameLayout,frg_savebox2).hide(frg_savebox2).commit();
     }
 }
