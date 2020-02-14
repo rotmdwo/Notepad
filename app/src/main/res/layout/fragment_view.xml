@@ -21,7 +21,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
-                android:background="#FFFFFF"
+                android:background="?attr/selectableItemBackground"
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
-                android:background="#FFFFFF"
+                android:background="?attr/selectableItemBackground"
                 android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="제목 입력"
             android:inputType="text"
             android:focusable="false"
             android:clickable="false"
@@ -71,12 +70,21 @@
                 android:ems="10"
                 android:focusable="false"
                 android:gravity="top"
-                android:hint="내용 입력"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="105dp"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="#88FFC7E9"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="100dp"/>
 
             <HorizontalScrollView
                 android:id="@+id/scrollView"

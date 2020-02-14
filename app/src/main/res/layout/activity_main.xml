@@ -20,7 +20,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_edit"
-            android:background="#FFFFFF"/>
+            android:background="?attr/selectableItemBackground"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_marginTop="10dp"
-        android:background="#88CBD3D8"/>
+        android:background="#88FFC7E9" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

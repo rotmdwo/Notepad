@@ -217,17 +217,19 @@ public class NewMemoFragment extends Fragment {
         }
 
         if((requestCode == 101 || requestCode == 103) && resultCode == RESULT_OK){  // 사진첨부와 사진찍기의 공통된 처리부분
+            // 사진이 돌아갔는지 확인하기 위해 사진의 정보 가져옴.
             try{
                 exif = new ExifInterface(imagePath);
             } catch(IOException e){
                 e.printStackTrace();
             }
 
-            // 사진이 회전 되어있다면 정방향으로 돌리고, 사진을 String 형태로 전환
+            // 사진이 회전 되어있다면 정방향으로 돌림
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
             image = BitmapFactory.decodeFile(imagePath);
             image = rotate(image, exifOrientationToDegrees(orientation));
 
+            // 사진을 String 형태로 전환
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             byte[] byteArray = bytes.toByteArray();
