@@ -140,6 +140,38 @@ public class NewMemoFragment extends Fragment {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
+                            @Override
+                            public boolean onLongClick(View v) {
+                                int id = v.getId();   // 해당 URL의 ID 받아오기
+                                v.setVisibility(View.GONE);  // 해당 URL을 미리보기에서 제거
+                                num_of_urls--;
+
+                                for(int i = 0; i < URLs.size() ; i++){  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
+                                    int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
+                                    if(num == id){
+                                        URLs.remove(i);
+                                    }
+                                }
+
+                                for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                    int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
+                                    String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
+                                    if(num > id){
+                                        pics.set(i, "pic"+(num-1)+"_"+string_image);
+                                    }
+                                }
+                                for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                    int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
+                                    String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
+                                    if(num > id){
+                                        URLs.set(i, "URL"+(num-1)+"_"+string_url);
+                                    }
+                                }
+                                return false;
+                            }
+                        });
+                        imageView.setId(num_of_pics+num_of_urls+1);
                         image_preview.addView(imageView);
 
                         // URLn_https:.. 형식으로 어레이리스트에 저장
@@ -161,9 +193,11 @@ public class NewMemoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 101){
+        String pic = null;
+        Bitmap image = null;
+
+        if(requestCode == 101){  // 사진첨부 처리부분
             Uri file;
-            Bitmap image;
 
             file = data.getData();
 
@@ -187,30 +221,19 @@ public class NewMemoFragment extends Fragment {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             byte[] byteArray = bytes.toByteArray();
-            String pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
-
-            // 이미지 미리보기 띄우기
-            ImageView imageView = new ImageView(getContext());
-            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
-            imageView.setLayoutParams(params);
-            imageView.setImageBitmap(image);
-            image_preview.addView(imageView);
-
-            // 사진 string을 어레이 리스트에 저장
-            num_of_pics++;
-            pics.add("pic"+(num_of_pics+num_of_urls)+"_"+pic);
+            pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
         }
 
-        if(requestCode == 103){
-            Bitmap image = BitmapFactory.decodeFile(file.getAbsolutePath());
+        if(requestCode == 103){  // 사진찍기 처리부분
+            image = BitmapFactory.decodeFile(file.getAbsolutePath());
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             byte[] byteArray = bytes.toByteArray();
-            String pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
+            pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
+        }
 
+        if(requestCode == 101 || requestCode == 103){  // 사진첨부와 사진찍기의 공통된 처리부분
             // 이미지 미리보기 띄우기
             ImageView imageView = new ImageView(getContext());
             int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
@@ -219,11 +242,44 @@ public class NewMemoFragment extends Fragment {
             imageView.setLayoutParams(params);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setImageBitmap(image);
+            imageView.setId(num_of_urls+num_of_pics+1);
             image_preview.addView(imageView);
 
             // 사진 string을 어레이 리스트에 저장
             num_of_pics++;
             pics.add("pic"+(num_of_pics+num_of_urls)+"_"+pic);
+
+            imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
+                @Override
+                public boolean onLongClick(View v) {
+                    int id = v.getId();   // 해당 로컬사진의 ID 받아오기
+                    v.setVisibility(View.GONE);  // 해당 로컬사진을 미리보기에서 제거
+                    num_of_pics--;
+
+                    for(int i = 0; i < pics.size() ; i++){  // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
+                        int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
+                        if(num == id){
+                            pics.remove(i);
+                        }
+                    }
+
+                    for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                        int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
+                        String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
+                        if(num > id){
+                            pics.set(i, "pic"+(num-1)+"_"+string_image);
+                        }
+                    }
+                    for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                        int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
+                        String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
+                        if(num > id){
+                            URLs.set(i, "URL"+(num-1)+"_"+string_url);
+                        }
+                    }
+                    return false;
+                }
+            });
         }
     }
 
