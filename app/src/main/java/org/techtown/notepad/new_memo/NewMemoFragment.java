@@ -84,7 +84,11 @@ public class NewMemoFragment extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((NewMemoActivity) NewMemoActivity.mContext).manager.beginTransaction().show(((NewMemoActivity) NewMemoActivity.mContext).frg_savebox).commit();
+                if(title.getText().toString().equals("") || content.getText().toString().equals("")){
+                    Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT).show();
+                } else{
+                    ((NewMemoActivity) NewMemoActivity.mContext).manager.beginTransaction().show(((NewMemoActivity) NewMemoActivity.mContext).frg_savebox).commit();
+                }
             }
         });
 
