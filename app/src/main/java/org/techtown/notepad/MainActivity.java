@@ -22,6 +22,7 @@ import org.techtown.notepad.list.list_item_adapter;
 import org.techtown.notepad.new_memo.NewMemoActivity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -94,13 +95,23 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             for(String s : pics){
                 pics_array[i++] = s;
             }
-            java.util.Arrays.sort(pics_array);
+            java.util.Arrays.sort(pics_array,new Comparator<String>(){  // 숫자 부분만 비교해야지 사진이 10개 이상일 때 정렬이 제대로 됨.
+                @Override
+                public int compare(String s1, String s2) {
+                    return Integer.parseInt(s1.substring(3,s1.indexOf('_'))) - Integer.parseInt(s2.substring(3,s2.indexOf('_')));  // 오름차순 정렬
+                }
+            });
             String URLs_array[] = new String [URLs.size()];
             int j = 0;
             for(String s : URLs){
                 URLs_array[j++] = s;
             }
-            java.util.Arrays.sort(URLs_array);
+            java.util.Arrays.sort(URLs_array,new Comparator<String>(){
+                @Override
+                public int compare(String s1, String s2) {
+                    return Integer.parseInt(s1.substring(3,s1.indexOf('_'))) - Integer.parseInt(s2.substring(3,s2.indexOf('_')));
+                }
+            });
 
             if(URLs_array.length != 0 && URLs_array[0].substring(3,5).equals("1_")){  // URL 이미지가 1번일 때
                 int _location = URLs_array[0].indexOf('_');

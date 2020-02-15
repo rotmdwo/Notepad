@@ -31,6 +31,7 @@ import org.techtown.notepad.R;
 import org.techtown.notepad.test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -106,13 +107,23 @@ public class ViewFragment extends Fragment {
         for(String s : pics){
             pics_array[i++] = s;
         }
-        java.util.Arrays.sort(pics_array);
+        java.util.Arrays.sort(pics_array,new Comparator<String>(){  // 숫자 부분만 비교해야지 사진이 10개 이상일 때 정렬이 제대로 됨.
+            @Override
+            public int compare(String s1, String s2) {
+                return Integer.parseInt(s1.substring(3,s1.indexOf('_'))) - Integer.parseInt(s2.substring(3,s2.indexOf('_')));  // 오름차순 정렬
+            }
+        });
         String URLs_array[] = new String [URLs.size()];
         int j = 0;
         for(String s : URLs){
             URLs_array[j++] = s;
         }
-        java.util.Arrays.sort(URLs_array);
+        java.util.Arrays.sort(URLs_array,new Comparator<String>(){
+            @Override
+            public int compare(String s1, String s2) {
+                return Integer.parseInt(s1.substring(3,s1.indexOf('_'))) - Integer.parseInt(s2.substring(3,s2.indexOf('_')));
+            }
+        });
 
         ArrayList<String> allPics_array = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트
         int num_of_all_pics = pics_array.length + URLs_array.length; // 전체 사진 수
