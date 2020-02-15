@@ -27,7 +27,7 @@ import java.util.Set;
 
 public class SaveBoxFragment2 extends Fragment {
     SaveBoxFragment2 mFragment;
-
+    Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,20 +46,23 @@ public class SaveBoxFragment2 extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {  // 내용 저장
             @Override
             public void onClick(View v) {
-                String title = ModifyFragment.mFragment.title.getText().toString();
-                String content = ModifyFragment.mFragment.content.getText().toString();
+                if(save_already_clicked == false){ // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
+                    save_already_clicked = true;
+                    String title = ModifyFragment.mFragment.title.getText().toString();
+                    String content = ModifyFragment.mFragment.content.getText().toString();
 
-                // 기존에 저장되어 있던 내용을 삭제
-                String name = deleteName();
-                deleteNote(name);
+                    // 기존에 저장되어 있던 내용을 삭제
+                    String name = deleteName();
+                    deleteNote(name);
 
-                // 수정하는 시간을 Key값으로 새로운 내용을 저장
-                saveNote(title,content,(ModifyFragment.mFragment).pics, (ModifyFragment.mFragment).URLs);
-                Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
+                    // 수정하는 시간을 Key값으로 새로운 내용을 저장
+                    saveNote(title,content,(ModifyFragment.mFragment).pics, (ModifyFragment.mFragment).URLs);
+                    Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
             }
         });
 
