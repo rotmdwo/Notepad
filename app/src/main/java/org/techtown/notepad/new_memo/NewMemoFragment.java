@@ -224,9 +224,16 @@ public class NewMemoFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            // 메모리 초과 문제 해결하기 위해 이미지 압축
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(imagePath,options);
+            options.inSampleSize = ResizeRatio(options.outWidth,options.outHeight);
+            options.inJustDecodeBounds = false;
+
             // 사진이 회전 되어있다면 정방향으로 돌림
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
-            image = BitmapFactory.decodeFile(imagePath);
+            image = BitmapFactory.decodeFile(imagePath,options);
             image = rotate(image, exifOrientationToDegrees(orientation));
 
             // 사진을 String 형태로 전환
@@ -324,6 +331,18 @@ public class NewMemoFragment extends Fragment {
             }
         }
         return bitmap;
+    }
+
+    int ResizeRatio(int width, int height){ // 메모리 초과 문제 해결하기 위해 이미지 압축
+        final int goal_width = 500;
+        final int goal_height = 500;
+        int ratio = 1;
+
+        while(width / (ratio+1) > goal_width && height / (ratio+1) > goal_height){
+            ratio++;
+        }
+
+        return ratio;
     }
 
 }

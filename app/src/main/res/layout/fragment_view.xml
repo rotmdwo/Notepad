@@ -86,6 +86,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginBottom="100dp"/>
 
+            <ImageView
+                android:id="@+id/big_preview"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="200dp"
+                android:background="#000000"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="닫기"
+                android:visibility="invisible"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/big_preview" />
+
             <HorizontalScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"

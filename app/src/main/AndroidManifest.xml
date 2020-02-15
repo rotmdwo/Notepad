@@ -17,7 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".view_modify.view_modifyActivity"></activity>
+        <activity android:name=".test">
+
+        </activity>
+        <activity android:name=".view_modify.view_modifyActivity" />
         <activity android:name=".new_memo.NewMemoActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

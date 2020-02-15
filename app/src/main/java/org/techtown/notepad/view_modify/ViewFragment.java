@@ -4,6 +4,7 @@ package org.techtown.notepad.view_modify;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
+import org.techtown.notepad.test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,11 +42,23 @@ public class ViewFragment extends Fragment {
     ArrayList<String> pics = new ArrayList<>();
     ArrayList<String> URLs = new ArrayList<>();
     LinearLayout image_preview;
+    ImageView big_preview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_view, container, false);
+
+        big_preview = rootView.findViewById(R.id.big_preview);
+
+        final Button close_btn = rootView.findViewById(R.id.close);
+        close_btn.setOnClickListener(new View.OnClickListener() { // 큰 사진보기를 닫는 버튼
+            @Override
+            public void onClick(View v) {
+                big_preview.setVisibility(View.INVISIBLE);
+                close_btn.setVisibility(View.INVISIBLE);
+            }
+        });
 
         ImageButton back = rootView.findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() { // 뒤로가기 눌렀을 때
@@ -123,21 +138,39 @@ public class ViewFragment extends Fragment {
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
             // 이미지 String 형식에서 picn_ 또는 URLn_ 부분을 제거
-            String string_image = s.substring(s.indexOf('_')+1);
+            final String string_image = s.substring(s.indexOf('_')+1);
 
             if(s.substring(0,3).equals("pic")){ // 로컬 사진이면
                 // String to Byte 이미지 변환
                 byte[] bytes = Base64.decode(string_image,Base64.DEFAULT);
-                Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                final Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+
+                imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
+                    @Override
+                    public void onClick(View v) {
+                        big_preview.setVisibility(View.VISIBLE);
+                        close_btn.setVisibility(View.VISIBLE);
+                        big_preview.setImageBitmap(image);
+                    }
+                });
 
                 // 미리보기에 추가
                 imageView.setImageBitmap(image);
                 image_preview.addView(imageView);
 
             } else{  // URL 사진이면
-                RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
+                final RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
                 Glide.with(getContext()).load(string_image).apply(options).into(imageView);
                 image_preview.addView(imageView);
+
+                imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
+                    @Override
+                    public void onClick(View v) {
+                        big_preview.setVisibility(View.VISIBLE);
+                        close_btn.setVisibility(View.VISIBLE);
+                        Glide.with(getContext()).load(string_image).apply(options).into(big_preview);
+                    }
+                });
             }
         }
 

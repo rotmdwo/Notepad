@@ -124,7 +124,7 @@ public class ModifyFragment extends Fragment {
         for(int k = 0 ; k < num_of_urls ; k++){
             URLs.set(k, URLs_array[k]);
         }
-Log.d("asdf","pics_num: "+pics.size()+"   urls_num: "+URLs.size());
+
         // 순서대로 ImageView로 미리보기에 넣어줌
         int pic_found = 0, url_found = 0;
         for(int k = 1 ; k <= num_of_urls + num_of_pics ; k++){
