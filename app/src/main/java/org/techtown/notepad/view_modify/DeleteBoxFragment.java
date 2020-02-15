@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,22 +62,27 @@ public class DeleteBoxFragment extends Fragment {
     }
 
     private void deleteNote(String name) {  // 저장되어 있는 노트 삭제
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences(name, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.remove(name);
+        editor.clear();
         editor.commit();
+
+        // xml 파일 삭제
+        File file = new File("/data/data/org.techtown.notepad/shared_prefs/" + name + ".xml");
+        file.delete();
     }
 
     private Set<String> restoreNames(){  // 저장되어 있는 메모명(실제 타이틀이 아닌 마지막으로 수정된 시간으로 저장됨) 가져오기
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
         Set<String> defValues = new HashSet<>();
         return pref.getStringSet("names",defValues);
     }
 
     private void saveNames(Set<String> names){
         // Shared Prefrences 저장
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
         editor.putStringSet("names",names);
         editor.commit();
     }

@@ -178,7 +178,7 @@ public class ViewFragment extends Fragment {
     }
 
     private Set<String> restoreNote(String name){  // 노트 불러오기
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences(name, Activity.MODE_PRIVATE);
         Set<String> defValues = new HashSet<>();
         return pref.getStringSet(name,defValues);
     }

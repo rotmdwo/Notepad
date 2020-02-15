@@ -117,13 +117,13 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     }
 
     private Set<String> restoreNames(){  // 저장되어 있는 메모명(실제 타이틀이 아닌 마지막으로 수정된 시간으로 저장됨) 가져오기
-        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("names", Activity.MODE_PRIVATE);
         Set<String> defValues = new HashSet<>();
         return pref.getStringSet("names",defValues);
     }
 
     private Set<String> restoreNote(String name){  // 노트 불러오기
-        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(name, Activity.MODE_PRIVATE);
         Set<String> defValues = new HashSet<>();
         return pref.getStringSet(name,defValues);
     }

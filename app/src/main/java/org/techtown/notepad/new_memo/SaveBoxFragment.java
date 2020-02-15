@@ -85,15 +85,20 @@ public class SaveBoxFragment extends Fragment {
         }
 
         // Shared Prefrences 저장
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putStringSet("names",names);
-        editor.putStringSet(current_time,note);
-        editor.commit();
+        SharedPreferences pref_names = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor_names = pref_names.edit();
+        editor_names.clear();  // 클리어를 안 해주면 수정이 안 되는 문제 생김
+        editor_names.putStringSet("names",names);
+        editor_names.commit();
+
+        SharedPreferences pref_note = getActivity().getSharedPreferences(current_time, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor_note = pref_note.edit();
+        editor_note.putStringSet(current_time,note);
+        editor_note.commit();
     }
 
     private Set<String> restoreNames(){  // 저장되어 있는 메모명(실제 타이틀이 아닌 마지막으로 수정된 시간으로 저장됨) 가져오기
-        SharedPreferences pref = getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
         Set<String> defValues = new HashSet<>();
         return pref.getStringSet("names",defValues);
     }
