@@ -57,7 +57,7 @@ public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView imageView;
+        CircleImageView imageView; // 라이브러리: https://github.com/hdodenhof/CircleImageView
         TextView textView, textView2, time;
 
         public ViewHolder(@NonNull View itemView) {
@@ -86,7 +86,7 @@ public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.Vi
             if(item.getWebImage()){ // 첫 번째 이미지가 웹이미지면
                 // error()를 쓰려면 RequestOptions 클래스를 사용해야함 -> https://stackoverflow.com/questions/47910536/glide-4-3-1-how-to-use-error
                 RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
-                Glide.with(MainActivity.mContext).load(item.image_path).apply(options).into(imageView);
+                Glide.with(MainActivity.mContext).load(item.image_path).apply(options).into(imageView);  // 라이브러리: https://github.com/bumptech/glide
             } else if(item.image_path.equals("NO")){  // 저장된 이미지가 없다면
                 Drawable no_image = MainActivity.mContext.getDrawable(R.drawable.noimage);
                 imageView.setImageDrawable(no_image);

@@ -171,7 +171,7 @@ public class ViewFragment extends Fragment {
 
             } else{  // URL 사진이면
                 final RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
-                Glide.with(getContext()).load(string_image).apply(options).into(imageView);
+                Glide.with(getContext()).load(string_image).apply(options).into(imageView); // 라이브러리: https://github.com/bumptech/glide
                 image_preview.addView(imageView);
 
                 imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
@@ -179,7 +179,7 @@ public class ViewFragment extends Fragment {
                     public void onClick(View v) {
                         big_preview.setVisibility(View.VISIBLE);
                         close_btn.setVisibility(View.VISIBLE);
-                        Glide.with(getContext()).load(string_image).apply(options).into(big_preview);
+                        Glide.with(getContext()).load(string_image).apply(options).into(big_preview); // 라이브러리: https://github.com/bumptech/glide
                     }
                 });
             }

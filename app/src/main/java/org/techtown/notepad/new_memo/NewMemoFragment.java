@@ -133,7 +133,7 @@ public class NewMemoFragment extends Fragment {
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
                 imageView.setLayoutParams(params);
 
-                Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() {
+                Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() { // 라이브러리: https://github.com/bumptech/glide
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         Toast.makeText(getContext(),"잘못된 이미지 URL입니다.\n다시 한 번 확인해 주세요.", Toast.LENGTH_SHORT).show();

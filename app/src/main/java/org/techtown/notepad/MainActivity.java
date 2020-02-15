@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{
+public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{ // 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
     public static Context mContext;
     RecyclerView recyclerView;
     list_item_adapter adapter;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
         mContext = this; // 어댑터에서 이 액티비티 사용하기 위해 컨텍스트 저장
 
-        AutoPermissions.Companion.loadAllPermissions(this,102); // 자동권한요구
+        AutoPermissions.Companion.loadAllPermissions(this,102); // 자동권한요구 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
 
         // 어댑터와 리사이클러뷰 설정
         adapter = new list_item_adapter(this);
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        AutoPermissions.Companion.parsePermissions(this,requestCode,permissions,this);
+        AutoPermissions.Companion.parsePermissions(this,requestCode,permissions,this); // 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
     }
     @Override
     public void onDenied(int i, String[] strings) {
