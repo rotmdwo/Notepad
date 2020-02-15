@@ -19,6 +19,7 @@ import org.techtown.notepad.R;
 import org.techtown.notepad.new_memo.NewMemoActivity;
 import org.techtown.notepad.new_memo.NewMemoFragment;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,6 +92,7 @@ public class SaveBoxFragment2 extends Fragment {
         // Shared Prefrences 저장
         SharedPreferences pref_names = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor_names = pref_names.edit();
+        editor_names.clear();  // 클리어를 안 해주면 수정이 안 되는 문제 생김
         editor_names.putStringSet("names",names);
         editor_names.commit();
 
@@ -120,6 +122,10 @@ public class SaveBoxFragment2 extends Fragment {
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
         editor.commit();
+
+        // xml 파일 삭제
+        File file = new File("/data/data/org.techtown.notepad/shared_prefs/" + name + ".xml");
+        file.delete();
     }
 
     private void saveNames(Set<String> names){
