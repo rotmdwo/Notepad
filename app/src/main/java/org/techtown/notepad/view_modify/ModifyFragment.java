@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -141,12 +144,17 @@ public class ModifyFragment extends Fragment {
         for(int k = 1 ; k <= num_of_urls + num_of_pics ; k++){
             if (pic_found < pics_array.length && pics_array[pic_found].substring(3,pics_array[pic_found].indexOf('_')).equals(Integer.toString(k))){
                 // 이미지뷰 생성
-                ImageView imageView = new ImageView(getContext());
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
+                CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
+                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
+                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+                params.rightMargin = margin;
+                params.gravity = Gravity.CENTER_VERTICAL;
                 imageView.setLayoutParams(params);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView.setBorderWidth(1);
+                imageView.setBackgroundColor(0xFFFFFFFF);
+                imageView.setBorderColor(0xFF000000);
 
                 // 이미지 String 형식에서 picn_ 부분을 제거
                 String string_image = pics_array[pic_found].substring(pics_array[pic_found].indexOf('_')+1);
@@ -197,12 +205,17 @@ public class ModifyFragment extends Fragment {
 
             } else if(url_found < URLs_array.length && URLs_array[url_found].substring(3,URLs_array[url_found].indexOf('_')).equals(Integer.toString(k))){
                 // 이미지뷰 생성
-                ImageView imageView = new ImageView(getContext());
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
+                CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
+                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
+                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+                params.rightMargin = margin;
+                params.gravity = Gravity.CENTER_VERTICAL;
                 imageView.setLayoutParams(params);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView.setBorderWidth(1);
+                imageView.setBackgroundColor(0xFFFFFFFF);
+                imageView.setBorderColor(0xFF000000);
 
                 // 이미지 String 형식에서 URLn_ 부분을 제거
                 String string_image = URLs_array[url_found].substring(URLs_array[url_found].indexOf('_')+1);
@@ -300,11 +313,17 @@ public class ModifyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final String url = URL.getText().toString();
-                final ImageView imageView = new ImageView(getContext());
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
+                final CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
+                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
+                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+                params.rightMargin = margin;
+                params.gravity = Gravity.CENTER_VERTICAL;
                 imageView.setLayoutParams(params);
+                imageView.setBorderWidth(1);
+                imageView.setBackgroundColor(0xFFFFFFFF);
+                imageView.setBorderColor(0xFF000000);
 
                 Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() { // 라이브러리: https://github.com/bumptech/glide
                     @Override
@@ -353,6 +372,7 @@ public class ModifyFragment extends Fragment {
                         num_of_urls++;
                         URLs.add("URL"+(num_of_pics+num_of_urls)+"_"+url);
 
+                        URL.setText("");  // URL 입력화면 초기화
                         return false;
                     }
                 }).into(imageView); // 리스너 쓰려면 into()를 꼭 써야함.
@@ -415,12 +435,18 @@ public class ModifyFragment extends Fragment {
             pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
 
             // 이미지 미리보기 띄우기
-            ImageView imageView = new ImageView(getContext());
-            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
+            CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
+            int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+            params.rightMargin = margin;
+            params.gravity = Gravity.CENTER_VERTICAL;
             imageView.setLayoutParams(params);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setBorderWidth(1);
+            imageView.setBackgroundColor(0xFFFFFFFF);
+            imageView.setBorderColor(0xFF000000);
+
             imageView.setImageBitmap(image);
             imageView.setId(num_of_urls+num_of_pics+1);
             image_preview.addView(imageView);

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ViewFragment extends Fragment {
@@ -141,12 +144,17 @@ public class ViewFragment extends Fragment {
         image_preview = rootView.findViewById(R.id.image_preview);
         for(String s : allPics_array){
             // 이미지뷰 생성
-            ImageView imageView = new ImageView(getContext());
-            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width,height);  // 가로,세로 100dp
+            CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
+            int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+            params.rightMargin = margin;
+            params.gravity = Gravity.CENTER_VERTICAL;
             imageView.setLayoutParams(params);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setBorderWidth(1);
+            imageView.setBackgroundColor(0xFFFFFFFF);
+            imageView.setBorderColor(0xFF000000);
 
             // 이미지 String 형식에서 picn_ 또는 URLn_ 부분을 제거
             final String string_image = s.substring(s.indexOf('_')+1);
