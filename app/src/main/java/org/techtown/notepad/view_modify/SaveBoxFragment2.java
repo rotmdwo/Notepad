@@ -14,12 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.techtown.notepad.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
-import org.techtown.notepad.new_memo.NewMemoActivity;
-import org.techtown.notepad.new_memo.NewMemoFragment;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +52,7 @@ public class SaveBoxFragment2 extends Fragment {
 
                     // 기존에 저장되어 있던 내용을 삭제
                     String name = deleteName();
-                    deleteNote(name);
+                    DataProcess.deleteNote(name,getContext());
 
                     // 수정하는 시간을 Key값으로 새로운 내용을 저장
                     saveNote(title,content,(ModifyFragment.mFragment).pics, (ModifyFragment.mFragment).URLs);
@@ -72,7 +70,7 @@ public class SaveBoxFragment2 extends Fragment {
 
     private void saveNote(String title, String content, ArrayList<String> pics, ArrayList<String>URLs){
         // 현재 시간을 메모를 구분하는 이름으로 추가
-        Set<String> names = restoreNames();
+        Set<String> names = DataProcess.restoreNames(getContext());
         Date time = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         String current_time = format.format(time);
@@ -102,38 +100,12 @@ public class SaveBoxFragment2 extends Fragment {
         editor_note.commit();
     }
 
-    private Set<String> restoreNames(){  // 저장되어 있는 메모명(실제 타이틀이 아닌 마지막으로 수정된 시간으로 저장됨) 가져오기
-        SharedPreferences pref = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
-        Set<String> defValues = new HashSet<>();
-        return pref.getStringSet("names",defValues);
-    }
-
     private String deleteName(){  // 노트 리스트에서 기존 작성했던 노트이름(마지막 수정시간)을 삭제
         Intent intent = getActivity().getIntent();
         String name = intent.getStringExtra("name");
-        Set<String> allNoteNmaes = restoreNames();
+        Set<String> allNoteNmaes = DataProcess.restoreNames(getContext());
         allNoteNmaes.remove(name);
-        saveNames(allNoteNmaes);
+        DataProcess.saveNames(allNoteNmaes,getContext());
         return name;
-    }
-
-    private void deleteNote(String name) {  // 저장되어 있는 노트 삭제
-        SharedPreferences pref = getActivity().getSharedPreferences(name, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.clear();
-        editor.commit();
-
-        // xml 파일 삭제
-        File file = new File("/data/data/org.techtown.notepad/shared_prefs/" + name + ".xml");
-        file.delete();
-    }
-
-    private void saveNames(Set<String> names){
-        // Shared Prefrences 저장
-        SharedPreferences pref = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.clear();
-        editor.putStringSet("names",names);
-        editor.commit();
     }
 }

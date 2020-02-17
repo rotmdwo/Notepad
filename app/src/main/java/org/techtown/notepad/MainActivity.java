@@ -5,12 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -23,10 +20,8 @@ import org.techtown.notepad.new_memo.NewMemoActivity;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{ // 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
     public static Context mContext;
@@ -59,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         });
 
         // 최근 저장한 노트를 가장 위로 올라오게 하기 위해 Set -> Array로 만든 후 시간순으로 정렬 후 array의 뒤에서부터 가져온다.
-        Set<String> allNames = restoreNames();
+        Set<String> allNames = DataProcess.restoreNames(this);
         String allNames_array[] = new String[allNames.size()];
         int k = 0;
         for(String s : allNames){
@@ -74,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             ArrayList<String> URLs = new ArrayList<>();
 
             String name = allNames_array[l];
-            Set<String> note = restoreNote(name);
+            Set<String> note = DataProcess.restoreNote(name,getApplicationContext());
             Iterator<String> iterator_note = note.iterator();
             while(iterator_note.hasNext()){
                 String temp = iterator_note.next();
@@ -126,19 +121,6 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             recyclerView.setAdapter(adapter);
         }
     }
-
-    private Set<String> restoreNames(){  // 저장되어 있는 메모명(실제 타이틀이 아닌 마지막으로 수정된 시간으로 저장됨) 가져오기
-        SharedPreferences pref = getSharedPreferences("names", Activity.MODE_PRIVATE);
-        Set<String> defValues = new HashSet<>();
-        return pref.getStringSet("names",defValues);
-    }
-
-    private Set<String> restoreNote(String name){  // 노트 불러오기
-        SharedPreferences pref = getSharedPreferences(name, Activity.MODE_PRIVATE);
-        Set<String> defValues = new HashSet<>();
-        return pref.getStringSet(name,defValues);
-    }
-
 
     // 권한요구 메소드
     @Override

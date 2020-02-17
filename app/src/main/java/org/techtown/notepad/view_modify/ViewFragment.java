@@ -1,10 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,13 +24,12 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.techtown.notepad.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
-import org.techtown.notepad.test;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -89,7 +85,7 @@ public class ViewFragment extends Fragment {
         content_view.setText(intent.getStringExtra("content"));
         name = intent.getStringExtra("name");  // 각 노트를 구별하는 시간 이름
 
-        Set<String> note = restoreNote(name);
+        Set<String> note = DataProcess.restoreNote(name,getContext());
         Iterator<String> iterator_note = note.iterator();
         while(iterator_note.hasNext()){
             String temp = iterator_note.next();
@@ -196,9 +192,4 @@ public class ViewFragment extends Fragment {
         return rootView;
     }
 
-    private Set<String> restoreNote(String name){  // 노트 불러오기
-        SharedPreferences pref = getActivity().getSharedPreferences(name, Activity.MODE_PRIVATE);
-        Set<String> defValues = new HashSet<>();
-        return pref.getStringSet(name,defValues);
-    }
 }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.techtown.notepad.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 
 
 public class SaveBoxFragment extends Fragment {
@@ -67,7 +69,7 @@ public class SaveBoxFragment extends Fragment {
 
     private void saveNote(String title, String content, ArrayList<String>pics, ArrayList<String>URLs){
         // 현재 시간을 메모를 구분하는 이름으로 추가
-        Set<String> names = restoreNames();
+        Set<String> names = DataProcess.restoreNames(getContext());
         Date time = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         String current_time = format.format(time);
@@ -95,12 +97,6 @@ public class SaveBoxFragment extends Fragment {
         SharedPreferences.Editor editor_note = pref_note.edit();
         editor_note.putStringSet(current_time,note);
         editor_note.commit();
-    }
-
-    private Set<String> restoreNames(){  // 저장되어 있는 메모명(실제 타이틀이 아닌 마지막으로 수정된 시간으로 저장됨) 가져오기
-        SharedPreferences pref = getActivity().getSharedPreferences("names", Activity.MODE_PRIVATE);
-        Set<String> defValues = new HashSet<>();
-        return pref.getStringSet("names",defValues);
     }
 
 }

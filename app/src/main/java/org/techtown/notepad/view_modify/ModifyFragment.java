@@ -1,9 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -40,15 +37,14 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import org.techtown.notepad.DataProcess;
 import org.techtown.notepad.R;
-import org.techtown.notepad.new_memo.NewMemoActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -92,7 +88,7 @@ public class ModifyFragment extends Fragment {
         content.setText(content_string);
 
         // 노트에 저장된 사진들을 불러옴
-        Set<String> note = restoreNote(name);
+        Set<String> note = DataProcess.restoreNote(name,getContext());
         Iterator<String> iterator_note = note.iterator();
         while(iterator_note.hasNext()){
             String temp = iterator_note.next();
@@ -529,12 +525,6 @@ public class ModifyFragment extends Fragment {
             }
         }
         return bitmap;
-    }
-
-    private Set<String> restoreNote(String name){  // 노트 불러오기
-        SharedPreferences pref = getActivity().getSharedPreferences(name, Activity.MODE_PRIVATE);
-        Set<String> defValues = new HashSet<>();
-        return pref.getStringSet(name,defValues);
     }
 
     int ResizeRatio(int width, int height){ // 메모리 초과 문제 해결하기 위해 이미지 압축
