@@ -77,6 +77,7 @@ public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.Vi
                     intent.putExtra("content",items.get(pos).getContent());
                     intent.putExtra("name",items.get(pos).getTime());
                     MainActivity.mContext.startActivity(intent);
+                    ((MainActivity)MainActivity.mContext).overridePendingTransition(R.anim.anim_slide_in_left,R.anim.anim_not_move);
                 }
             });
 
@@ -145,5 +146,13 @@ public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.Vi
 
     public void addListItem(list_item item) {
         items.add(item);
+    }
+
+    public void addListItem(list_item item, int index) {
+        items.add(index,item);
+    }
+
+    public void removeListItem(int index) {
+        items.remove(index);
     }
 }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.techtown.notepad.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
+import org.techtown.notepad.list.list_item;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,10 +57,7 @@ public class SaveBoxFragment extends Fragment {
 
                     saveNote(title,content,(NewMemoFragment.mFragment).pics, (NewMemoFragment.mFragment).URLs);
                     Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -97,6 +95,19 @@ public class SaveBoxFragment extends Fragment {
         SharedPreferences.Editor editor_note = pref_note.edit();
         editor_note.putStringSet(current_time,note);
         editor_note.commit();
+
+        // 메인액티비티 리사이클러뷰 갱신
+        if((NewMemoFragment.mFragment).URLs.size() != 0 && (NewMemoFragment.mFragment).URLs.get(0).substring(3,5).equals("1_")){  // URL 이미지가 1번일 때
+            int _location = (NewMemoFragment.mFragment).URLs.get(0).indexOf('_');
+            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(true,(NewMemoFragment.mFragment).URLs.get(0).substring(_location+1),title,content,current_time),0);
+        } else if((NewMemoFragment.mFragment).pics.size() != 0 && (NewMemoFragment.mFragment).pics.get(0).substring(3,5).equals("1_")){ // 로컬 이미지가 1번일 때
+            int _location = (NewMemoFragment.mFragment).pics.get(0).indexOf('_');
+            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,(NewMemoFragment.mFragment).pics.get(0).substring(_location+1),title,content,current_time),0);
+        } else if((NewMemoFragment.mFragment).URLs.size() == 0 && (NewMemoFragment.mFragment).pics.size() == 0){  // 첨부된 이미지가 없을 때
+            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,"NO",title,content,current_time),0);
+        }
+        ((MainActivity)MainActivity.mContext).recyclerView.setAdapter(((MainActivity)MainActivity.mContext).adapter);
+
     }
 
 }

@@ -17,6 +17,8 @@ import android.widget.Toast;
 import org.techtown.notepad.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
+import org.techtown.notepad.list.list_item;
+import org.techtown.notepad.new_memo.NewMemoFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.Set;
 public class SaveBoxFragment2 extends Fragment {
     SaveBoxFragment2 mFragment;
     Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
+    int location=0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,10 +60,7 @@ public class SaveBoxFragment2 extends Fragment {
                     // 수정하는 시간을 Key값으로 새로운 내용을 저장
                     saveNote(title,content,(ModifyFragment.mFragment).pics, (ModifyFragment.mFragment).URLs);
                     Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -98,12 +98,40 @@ public class SaveBoxFragment2 extends Fragment {
         SharedPreferences.Editor editor_note = pref_note.edit();
         editor_note.putStringSet(current_time,note);
         editor_note.commit();
+
+        // 메인액티비티 리사이클러뷰 갱신
+        if((ModifyFragment.mFragment).URLs.size() != 0 && (ModifyFragment.mFragment).URLs.get(0).substring(3,5).equals("1_")){  // URL 이미지가 1번일 때
+            int _location = (ModifyFragment.mFragment).URLs.get(0).indexOf('_');
+            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(true,(ModifyFragment.mFragment).URLs.get(0).substring(_location+1),title,content,current_time),0);
+        } else if((ModifyFragment.mFragment).pics.size() != 0 && (ModifyFragment.mFragment).pics.get(0).substring(3,5).equals("1_")){ // 로컬 이미지가 1번일 때
+            int _location = (ModifyFragment.mFragment).pics.get(0).indexOf('_');
+            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,(ModifyFragment.mFragment).pics.get(0).substring(_location+1),title,content,current_time),0);
+        } else if((ModifyFragment.mFragment).URLs.size() == 0 && (ModifyFragment.mFragment).pics.size() == 0){  // 첨부된 이미지가 없을 때
+            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,"NO",title,content,current_time),0);
+        }
+
+        ((MainActivity)MainActivity.mContext).adapter.removeListItem(names.size()-location);
+        ((MainActivity)MainActivity.mContext).recyclerView.setAdapter(((MainActivity)MainActivity.mContext).adapter);
     }
 
     private String deleteName(){  // 노트 리스트에서 기존 작성했던 노트이름(마지막 수정시간)을 삭제
         Intent intent = getActivity().getIntent();
         String name = intent.getStringExtra("name");
         Set<String> allNoteNmaes = DataProcess.restoreNames(getContext());
+
+        String allNames_array[] = new String[allNoteNmaes.size()];
+        int k = 0;
+        for(String s : allNoteNmaes){
+            allNames_array[k++] = s;
+        }
+        java.util.Arrays.sort(allNames_array);
+
+        for(int i=0;i<allNames_array.length;i++){
+            if(allNames_array[i].equals(name)){
+                location = i;
+            }
+        }
+
         allNoteNmaes.remove(name);
         DataProcess.saveNames(allNoteNmaes,getContext());
         return name;

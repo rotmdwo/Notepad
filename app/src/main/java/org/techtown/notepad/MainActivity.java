@@ -25,8 +25,8 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{ // 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
     public static Context mContext;
-    RecyclerView recyclerView;
-    list_item_adapter adapter;
+    public RecyclerView recyclerView;
+    public list_item_adapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), NewMemoActivity.class);
                 startActivity(intent);
+                ((MainActivity)MainActivity.mContext).overridePendingTransition(R.anim.anim_slide_in_left,R.anim.anim_not_move);
             }
         });
 

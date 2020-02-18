@@ -37,4 +37,10 @@ public class view_modifyActivity extends AppCompatActivity {
         manager.beginTransaction().add(R.id.frameLayout,frg_view).add(R.id.frameLayout,frg_modifybox).hide(frg_modifybox).add(R.id.frameLayout,frg_modify)
                 .hide(frg_modify).add(R.id.frameLayout,frg_deletebox).hide(frg_deletebox).add(R.id.frameLayout,frg_backbox2).hide(frg_backbox2).add(R.id.frameLayout,frg_savebox2).hide(frg_savebox2).commit();
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_not_move, R.anim.anim_slide_out_right);
+    }
 }

@@ -64,9 +64,7 @@ public class ViewFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() { // 뒤로가기 눌렀을 때
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                getActivity().finish();
             }
         });
 

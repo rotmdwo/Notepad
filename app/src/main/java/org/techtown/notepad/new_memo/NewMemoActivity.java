@@ -27,4 +27,10 @@ public class NewMemoActivity extends AppCompatActivity {
         frg_savebox = new SaveBoxFragment();
         manager.beginTransaction().add(R.id.frameLayout,frg_newmemo).add(R.id.frameLayout,frg_backbox).hide(frg_backbox).add(R.id.frameLayout,frg_savebox).hide(frg_savebox).commit();
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_not_move, R.anim.anim_slide_out_right);
+    }
 }

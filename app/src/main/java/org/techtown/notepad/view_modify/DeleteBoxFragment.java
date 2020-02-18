@@ -19,6 +19,7 @@ import java.util.Set;
 
 public class DeleteBoxFragment extends Fragment {
     DeleteBoxFragment mFragment;
+    int location = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,16 +34,30 @@ public class DeleteBoxFragment extends Fragment {
                 Intent intent = getActivity().getIntent();
                 String name = intent.getStringExtra("name");
                 Set<String> allNoteNmaes = DataProcess.restoreNames(getContext());
+
+                String allNames_array[] = new String[allNoteNmaes.size()];
+                int k = 0;
+                for(String s : allNoteNmaes){
+                    allNames_array[k++] = s;
+                }
+                java.util.Arrays.sort(allNames_array);
+
+                for(int i=0;i<allNames_array.length;i++){
+                    if(allNames_array[i].equals(name)){
+                        location = i;
+                    }
+                }
+
                 allNoteNmaes.remove(name);
 
                 //SharedPreferences 삭제 및 갱신
                 DataProcess.deleteNote(name,getContext());
                 DataProcess.saveNames(allNoteNmaes,getContext());
 
-                // 리스트 화면으로 돌아감
-                Intent intent2 = new Intent(getContext(), MainActivity.class);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent2);
+                ((MainActivity)MainActivity.mContext).adapter.removeListItem(allNoteNmaes.size()-location);
+                ((MainActivity)MainActivity.mContext).recyclerView.setAdapter(((MainActivity)MainActivity.mContext).adapter);
+
+                getActivity().finish();
             }
         });
 
