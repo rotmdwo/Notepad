@@ -2,7 +2,6 @@ package org.techtown.notepad.new_memo;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -14,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.techtown.notepad.DataProcess;
+import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 import org.techtown.notepad.list.list_item;

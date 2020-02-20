@@ -1,4 +1,4 @@
-package org.techtown.notepad;
+package org.techtown.notepad.classes_for_methods;
 
 import java.util.ArrayList;
 import java.util.Comparator;

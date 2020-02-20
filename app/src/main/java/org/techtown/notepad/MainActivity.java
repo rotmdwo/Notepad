@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 
+import org.techtown.notepad.classes_for_methods.Array_sort;
+import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.list.list_item;
 import org.techtown.notepad.list.list_item_adapter;
 import org.techtown.notepad.new_memo.NewMemoActivity;

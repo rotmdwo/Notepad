@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import org.techtown.notepad.Array_sort;
-import org.techtown.notepad.DataProcess;
+import org.techtown.notepad.classes_for_methods.Array_sort;
+import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 

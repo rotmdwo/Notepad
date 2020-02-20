@@ -23,8 +23,8 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import org.techtown.notepad.Array_sort;
-import org.techtown.notepad.DataProcess;
+import org.techtown.notepad.classes_for_methods.Array_sort;
+import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.R;
 
 import java.util.ArrayList;

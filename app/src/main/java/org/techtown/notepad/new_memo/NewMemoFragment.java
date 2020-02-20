@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -26,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -36,6 +34,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import org.techtown.notepad.classes_for_methods.LoadPicture;
 import org.techtown.notepad.R;
 
 import java.io.ByteArrayOutputStream;
@@ -232,16 +231,17 @@ public class NewMemoFragment extends Fragment {
             }
 
             // 메모리 초과 문제 해결하기 위해 이미지 압축
+            LoadPicture loadPicture = new LoadPicture();
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(imagePath,options);
-            options.inSampleSize = ResizeRatio(options.outWidth,options.outHeight);
+            options.inSampleSize = loadPicture.ResizeRatio(options.outWidth,options.outHeight,500,500);
             options.inJustDecodeBounds = false;
 
             // 사진이 회전 되어있다면 정방향으로 돌림
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
             image = BitmapFactory.decodeFile(imagePath,options);
-            image = rotate(image, exifOrientationToDegrees(orientation));
+            image = loadPicture.rotate(image, loadPicture.exifOrientationToDegrees(orientation));
 
             // 사진을 String 형태로 전환
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -303,59 +303,4 @@ public class NewMemoFragment extends Fragment {
             });
         }
     }
-
-    public int exifOrientationToDegrees(int exifOrientation)
-    {
-        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90)
-        {
-            return 90;
-        }
-        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180)
-        {
-            return 180;
-        }
-        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_270)
-        {
-            return 270;
-        }
-        return 0;
-    }
-
-    public Bitmap rotate(Bitmap bitmap, int degrees)
-    {
-        if(degrees != 0 && bitmap != null)
-        {
-            Matrix m = new Matrix();
-            m.setRotate(degrees, (float) bitmap.getWidth() / 2,
-                    (float) bitmap.getHeight() / 2);
-
-            try
-            {
-                Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0,
-                        bitmap.getWidth(), bitmap.getHeight(), m, true);
-                if(bitmap != converted)
-                {
-                    bitmap.recycle();
-                    bitmap = converted;
-                }
-            }
-            catch(OutOfMemoryError ex)
-            {
-            }
-        }
-        return bitmap;
-    }
-
-    int ResizeRatio(int width, int height){ // 메모리 초과 문제 해결하기 위해 이미지 압축
-        final int goal_width = 500;
-        final int goal_height = 500;
-        int ratio = 1;
-
-        while(width / (ratio+1) > goal_width && height / (ratio+1) > goal_height){
-            ratio++;
-        }
-
-        return ratio;
-    }
-
 }

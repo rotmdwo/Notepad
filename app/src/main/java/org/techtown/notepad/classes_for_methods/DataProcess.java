@@ -1,4 +1,4 @@
-package org.techtown.notepad;
+package org.techtown.notepad.classes_for_methods;
 
 import android.app.Activity;
 import android.content.Context;
