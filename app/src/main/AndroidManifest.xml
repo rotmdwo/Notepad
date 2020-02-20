@@ -17,9 +17,6 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".test">
-
-        </activity>
         <activity android:name=".view_modify.view_modifyActivity" />
         <activity android:name=".new_memo.NewMemoActivity" />
         <activity android:name=".MainActivity">

@@ -14,11 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.techtown.notepad.Array_sort;
 import org.techtown.notepad.DataProcess;
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 import org.techtown.notepad.list.list_item;
-import org.techtown.notepad.new_memo.NewMemoFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -119,12 +119,8 @@ public class SaveBoxFragment2 extends Fragment {
         String name = intent.getStringExtra("name");
         Set<String> allNoteNmaes = DataProcess.restoreNames(getContext());
 
-        String allNames_array[] = new String[allNoteNmaes.size()];
-        int k = 0;
-        for(String s : allNoteNmaes){
-            allNames_array[k++] = s;
-        }
-        java.util.Arrays.sort(allNames_array);
+        Array_sort array_sort = new Array_sort();
+        String allNames_array[] = array_sort.setToArray(allNoteNmaes);
 
         for(int i=0;i<allNames_array.length;i++){
             if(allNames_array[i].equals(name)){

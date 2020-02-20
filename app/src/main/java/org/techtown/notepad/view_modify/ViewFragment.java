@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.util.Base64;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,12 +23,11 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.techtown.notepad.Array_sort;
 import org.techtown.notepad.DataProcess;
-import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -98,29 +96,10 @@ public class ViewFragment extends Fragment {
             }
         }
 
-        // 사진의 순서를 정렬하기 위해 Set -> Array 형태로 변환
-        String pics_array[] = new String[pics.size()];
-        int i = 0;
-        for(String s : pics){
-            pics_array[i++] = s;
-        }
-        java.util.Arrays.sort(pics_array,new Comparator<String>(){  // 숫자 부분만 비교해야지 사진이 10개 이상일 때 정렬이 제대로 됨.
-            @Override
-            public int compare(String s1, String s2) {
-                return Integer.parseInt(s1.substring(3,s1.indexOf('_'))) - Integer.parseInt(s2.substring(3,s2.indexOf('_')));  // 오름차순 정렬
-            }
-        });
-        String URLs_array[] = new String [URLs.size()];
-        int j = 0;
-        for(String s : URLs){
-            URLs_array[j++] = s;
-        }
-        java.util.Arrays.sort(URLs_array,new Comparator<String>(){
-            @Override
-            public int compare(String s1, String s2) {
-                return Integer.parseInt(s1.substring(3,s1.indexOf('_'))) - Integer.parseInt(s2.substring(3,s2.indexOf('_')));
-            }
-        });
+        Array_sort array_sort = new Array_sort();
+        String pics_array[] = array_sort.arrayListToArrayForPic(pics);
+        String URLs_array[] = array_sort.arrayListToArrayForPic(URLs);
+
 
         ArrayList<String> allPics_array = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트
         int num_of_all_pics = pics_array.length + URLs_array.length; // 전체 사진 수

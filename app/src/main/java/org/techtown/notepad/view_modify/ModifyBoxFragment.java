@@ -1,7 +1,6 @@
 package org.techtown.notepad.view_modify;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;

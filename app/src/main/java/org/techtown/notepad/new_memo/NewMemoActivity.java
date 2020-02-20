@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.EditText;
 
 import org.techtown.notepad.R;
 

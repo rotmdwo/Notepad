@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import org.techtown.notepad.R;
-import org.techtown.notepad.new_memo.BackBoxFragment;
-import org.techtown.notepad.new_memo.NewMemoActivity;
 
 
 public class BackBoxFragment2 extends Fragment {
