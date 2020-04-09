@@ -26,3 +26,22 @@ This repository is for Line Plus Challenge
 <p> 홈 화면은 메모리스트로 구성되며, 우측상단의 새메모 버튼을 눌러 새로운 메모를 쓰거나, 리스트에서 노트를 선택해 상세하게 볼 수 있다.</p>
 <p> 새 글을 쓰거나 수정할 때는 이미지를 길게 눌러 첨부취소 할 수 있다.</p>
 <p> 메모상세보기에서는 이미지를 클릭해 큰 화면으로 자세히 볼 수 있다.</p>
+
+<h2> Result </h2>
+<img src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/result1.jpg?raw=true">
+<img src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/result2.jpg?raw=true">
+<br>
+<p> 결론적으로 전체 참가자 중 상위 48%의 성적을 받았다. </p>
+<br>
+<h3> 고쳐야 할 단점과 스스로 생각해본 해결방법</h3>
+<p> ● 기능별 함수 구분이 안 되어 있음 / 클래스 내 메소드 분리가 되어 있지 않음.</p>
+<p> ☞ OnCreate 메소드가 길어지면 안 된다. OnCreate 메소드는 간단명료하게 하고, 구현 부분은 Utility Class에서 구현하자.</p>
+<br>
+<p> ● 코딩컨벤션이 통일되어 있지 않음.</p>
+<p> ☞ 앞으로는 프로젝트에 착수하기 전에 코딩컨벤션을 꼭 확인하고 하자. 예를 들어, 로컬변수/멤버변수 이름은 카멜표기법, 파이널 상수는 대문자 표기, for/while/if/case문 등 뒤에는 한 칸의 공백을 주고 괄호를 시작하는 등 이점을 꼭 상기하자.</p>
+<br>
+<p> ● context 변수를 static으로 사용하여 메모리 leak을 유발할 수 있음. </p>
+<p> ☞ context 변수를 static으로 사용한다면 작은 앱에서는 문제가 없지만 액티비티를 많이 사용하는 앱에서는 메모리 leak을 유발하여 튕김의 원인이 된다. 앞으로는 다른 액티비티의 context가 필요한 액티비티의 생성자에서 context 변수를 받아오는 형태로 다른 액티비티의 메소드 및 멤버변수를 사용하자.</p>
+<br>
+
+<p> 위에 지적된 3가지를 개선하여 다음 과제에서는 상위 30% 안에 드는 것을 목표로 한다. </p>
