@@ -1,6 +1,7 @@
 package org.techtown.notepad.new_memo;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -52,6 +53,7 @@ public class NewMemoFragment extends Fragment {
     static NewMemoFragment mFragment;
     LinearLayout image_preview;
     File file;
+    Context newMemoContext;
 
     // 현재 노트에 첨부한 로컬사진의 byte to string 형식과 url 링크 저장
     ArrayList<String> pics = new ArrayList<>();
@@ -60,6 +62,10 @@ public class NewMemoFragment extends Fragment {
     // 현재 노트에 로컬사진과 url 사진이 몇 개 있는지 저장
     int num_of_pics = 0;
     int num_of_urls = 0;
+
+    public NewMemoFragment(Context newMemoContext) {
+        this.newMemoContext = newMemoContext;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +83,7 @@ public class NewMemoFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((NewMemoActivity) NewMemoActivity.mContext).manager.beginTransaction().show(((NewMemoActivity) NewMemoActivity.mContext).frg_backbox).commit();
+                ((NewMemoActivity) newMemoContext).manager.beginTransaction().show(((NewMemoActivity) newMemoContext).frg_backbox).commit();
             }
         });
 
@@ -88,7 +94,7 @@ public class NewMemoFragment extends Fragment {
                 if(title.getText().toString().equals("") || content.getText().toString().equals("")){
                     Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT).show();
                 } else{
-                    ((NewMemoActivity) NewMemoActivity.mContext).manager.beginTransaction().show(((NewMemoActivity) NewMemoActivity.mContext).frg_savebox).commit();
+                    ((NewMemoActivity) newMemoContext).manager.beginTransaction().show(((NewMemoActivity) newMemoContext).frg_savebox).commit();
                 }
             }
         });

@@ -1,6 +1,7 @@
 package org.techtown.notepad.new_memo;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,11 @@ import org.techtown.notepad.R;
 
 public class BackBoxFragment extends Fragment {
     BackBoxFragment backBoxFragment;
+    Context newMemoContext;
+
+    public BackBoxFragment(Context newMemoContext) {
+        this.newMemoContext = newMemoContext;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +41,7 @@ public class BackBoxFragment extends Fragment {
         keep_writing.setOnClickListener(new View.OnClickListener() {  // 나가지 않고 계속 쓰기
             @Override
             public void onClick(View v) {
-                ((NewMemoActivity) NewMemoActivity.mContext).manager.beginTransaction().hide(backBoxFragment).commit();
+                ((NewMemoActivity) newMemoContext).manager.beginTransaction().hide(backBoxFragment).commit();
             }
         });
 

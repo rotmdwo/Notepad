@@ -32,9 +32,11 @@ public class SaveBoxFragment2 extends Fragment {
     Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
     int location=0;
     Context mainContext;
+    Context viewModifyContext;
 
-    public SaveBoxFragment2(Context mainContext) {
+    public SaveBoxFragment2(Context mainContext, Context viewModifyContext) {
         this.mainContext = mainContext;
+        this.viewModifyContext = viewModifyContext;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class SaveBoxFragment2 extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {  // 저장 취소
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().hide(mFragment).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().hide(mFragment).commit();
             }
         });
 

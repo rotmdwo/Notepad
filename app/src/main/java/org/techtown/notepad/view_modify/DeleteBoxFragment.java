@@ -23,9 +23,11 @@ public class DeleteBoxFragment extends Fragment {
     DeleteBoxFragment mFragment;
     int location = 0;
     Context mainContext;
+    Context viewModifyContext;
 
-    public DeleteBoxFragment(Context mainContext) {
+    public DeleteBoxFragment(Context mainContext, Context viewModifyContext) {
         this.mainContext = mainContext;
+        this.viewModifyContext = viewModifyContext;
     }
 
     @Override
@@ -69,7 +71,7 @@ public class DeleteBoxFragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() { // 취소 버튼
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity)view_modifyActivity.mContext).manager.beginTransaction().hide(mFragment).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().hide(mFragment).commit();
             }
         });
         return rootView;

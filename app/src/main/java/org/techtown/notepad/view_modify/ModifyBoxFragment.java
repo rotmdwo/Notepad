@@ -1,6 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,11 @@ import org.techtown.notepad.R;
 
 public class ModifyBoxFragment extends Fragment {
     ModifyBoxFragment mFragment;
+    Context viewModifyContext;
+
+    public ModifyBoxFragment(Context viewModifyContext) {
+        this.viewModifyContext = viewModifyContext;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,7 +32,7 @@ public class ModifyBoxFragment extends Fragment {
         background_button.setOnClickListener(new View.OnClickListener() {  // 배경 클릭하면 드롭박스 사라짐
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity)view_modifyActivity.mContext).manager.beginTransaction().hide(mFragment).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().hide(mFragment).commit();
             }
         });
 
@@ -34,7 +40,7 @@ public class ModifyBoxFragment extends Fragment {
         delete_button.setOnClickListener(new View.OnClickListener() {  // 삭제버튼 클릭
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity)view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity)view_modifyActivity.mContext).frg_deletebox).hide(mFragment).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_deletebox).hide(mFragment).commit();
             }
         });
 
@@ -42,8 +48,8 @@ public class ModifyBoxFragment extends Fragment {
         modify_button.setOnClickListener(new View.OnClickListener() {  // 수정버튼 클릭
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity)view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity)view_modifyActivity.mContext).frg_modify)
-                        .hide(mFragment).hide(((view_modifyActivity)view_modifyActivity.mContext).frg_view).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_modify)
+                        .hide(mFragment).hide(((view_modifyActivity) viewModifyContext).frg_view).commit();
             }
         });
         return rootView;

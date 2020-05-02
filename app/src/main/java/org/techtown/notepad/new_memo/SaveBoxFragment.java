@@ -31,9 +31,11 @@ public class SaveBoxFragment extends Fragment {
     SaveBoxFragment saveBoxFragment;
     Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
     Context mainContext;
+    Context newMemoContext;
 
-    public SaveBoxFragment(Context mainContext) {
+    public SaveBoxFragment(Context mainContext, Context newMemoContext) {
         this.mainContext = mainContext;
+        this.newMemoContext = newMemoContext;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class SaveBoxFragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {  // 저장 취소
             @Override
             public void onClick(View v) {
-                ((NewMemoActivity) NewMemoActivity.mContext).manager.beginTransaction().hide(saveBoxFragment).commit();
+                ((NewMemoActivity) newMemoContext).manager.beginTransaction().hide(saveBoxFragment).commit();
             }
         });
 

@@ -1,6 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -57,6 +58,7 @@ public class ModifyFragment extends Fragment {
     static ModifyFragment mFragment;
     LinearLayout image_preview;
     File file;
+    Context viewModifyContext;
 
     // 현재 노트에 첨부한 로컬사진의 byte to string 형식과 url 링크 저장
     ArrayList<String> pics = new ArrayList<>();
@@ -65,6 +67,10 @@ public class ModifyFragment extends Fragment {
     // 현재 노트에 로컬사진과 url 사진이 몇 개 있는지 저장
     int num_of_pics = 0;
     int num_of_urls = 0;
+
+    public ModifyFragment(Context viewModifyContext) {
+        this.viewModifyContext = viewModifyContext;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -241,7 +247,7 @@ public class ModifyFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_backbox2).commit();
             }
         });
 
@@ -252,7 +258,7 @@ public class ModifyFragment extends Fragment {
                 if(title.getText().toString().equals("") || content.getText().toString().equals("")){
                     Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT).show();
                 } else{
-                    ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2).commit();
+                    ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_savebox2).commit();
                 }
             }
         });

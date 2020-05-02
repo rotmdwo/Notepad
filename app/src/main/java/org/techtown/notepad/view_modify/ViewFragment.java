@@ -1,6 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +42,11 @@ public class ViewFragment extends Fragment {
     ArrayList<String> URLs = new ArrayList<>();
     LinearLayout image_preview;
     ImageView big_preview;
+    Context viewModifyContext;
+
+    public ViewFragment(Context viewModifyContext) {
+        this.viewModifyContext = viewModifyContext;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +76,7 @@ public class ViewFragment extends Fragment {
         modify_delete.setOnClickListener(new View.OnClickListener() { // 우측상단 ... 버튼 눌렀을 때
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity)view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity)view_modifyActivity.mContext).frg_modifybox).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_modifybox).commit();
             }
         });
 

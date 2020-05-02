@@ -17,9 +17,11 @@ import org.techtown.notepad.R;
 public class BackBoxFragment2 extends Fragment {
     BackBoxFragment2 mFragment;
     Context mainContext;
+    Context viewModifyContext;
 
-    public BackBoxFragment2(Context mainContext) {
+    public BackBoxFragment2(Context mainContext, Context viewModifyContext) {
         this.mainContext = mainContext;
+        this.viewModifyContext = viewModifyContext;
     }
 
     @Override
@@ -37,18 +39,18 @@ public class BackBoxFragment2 extends Fragment {
                 // 하지만 수정하는 fragment만 remove하고 재할당하면 뒤로가기와 저장하기 fragment가 동작하지 않는 문제가 있음
                 // 이유는 fragment stack 아래로 뒤로가기와 저장하기 UI fragment가 깔리고, 새로 만든 수정 fragment가 위로 올라오기 때문
                 // 이것을 해결하기 위해서는 UI fragment도 삭제하고 재할당
-                ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity) view_modifyActivity.mContext).frg_view).hide(mFragment).remove(((view_modifyActivity) view_modifyActivity.mContext).frg_modify).remove(((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2).remove(((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2).commit();
-                ((view_modifyActivity) view_modifyActivity.mContext).frg_modify = new ModifyFragment();
-                ((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2 = new BackBoxFragment2(mainContext);
-                ((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2 = new SaveBoxFragment2(mainContext);
-                ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().add(R.id.frameLayout, ((view_modifyActivity) view_modifyActivity.mContext).frg_modify).hide(((view_modifyActivity) view_modifyActivity.mContext).frg_modify).add(R.id.frameLayout, ((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2).hide(((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2).add(R.id.frameLayout, ((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2).hide(((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_view).hide(mFragment).remove(((view_modifyActivity) viewModifyContext).frg_modify).remove(((view_modifyActivity) viewModifyContext).frg_backbox2).remove(((view_modifyActivity) viewModifyContext).frg_savebox2).commit();
+                ((view_modifyActivity) viewModifyContext).frg_modify = new ModifyFragment(viewModifyContext);
+                ((view_modifyActivity) viewModifyContext).frg_backbox2 = new BackBoxFragment2(mainContext, viewModifyContext);
+                ((view_modifyActivity) viewModifyContext).frg_savebox2 = new SaveBoxFragment2(mainContext, viewModifyContext);
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().add(R.id.frameLayout, ((view_modifyActivity) viewModifyContext).frg_modify).hide(((view_modifyActivity) viewModifyContext).frg_modify).add(R.id.frameLayout, ((view_modifyActivity) viewModifyContext).frg_backbox2).hide(((view_modifyActivity) viewModifyContext).frg_backbox2).add(R.id.frameLayout, ((view_modifyActivity) viewModifyContext).frg_savebox2).hide(((view_modifyActivity) viewModifyContext).frg_savebox2).commit();
             }
         });
 
         keep_writing.setOnClickListener(new View.OnClickListener() {  // 나가지 않고 계속 쓰기
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().hide(mFragment).commit();
+                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().hide(mFragment).commit();
             }
         });
 
