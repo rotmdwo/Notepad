@@ -2,7 +2,6 @@ package org.techtown.notepad.view_modify;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;

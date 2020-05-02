@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.util.Base64;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -89,15 +87,15 @@ public class ViewFragment extends Fragment {
 
         Set<String> note = DataProcess.restoreNote(name,getContext());
         Iterator<String> iterator_note = note.iterator();
-        while(iterator_note.hasNext()){
+        while (iterator_note.hasNext()) {
             String temp = iterator_note.next();
-            if(temp.substring(0,5).equals("title")){
+            if (temp.substring(0,5).equals("title")) {
                 title = temp.substring(6);
-            } else if(temp.substring(0,7).equals("content")){
+            } else if (temp.substring(0,7).equals("content")) {
                 content = temp.substring(8);
-            } else if(temp.substring(0,3).equals("pic")){
+            } else if (temp.substring(0,3).equals("pic")) {
                 pics.add(temp);
-            } else if(temp.substring(0,3).equals("URL")){
+            } else if (temp.substring(0,3).equals("URL")) {
                 URLs.add(temp);
             }
         }
@@ -110,18 +108,18 @@ public class ViewFragment extends Fragment {
         ArrayList<String> allPics_array = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트
         int num_of_all_pics = pics_array.length + URLs_array.length; // 전체 사진 수
         int pic_found = 0, url_found = 0; // 현재까지 탐색된 로컬사진, url 사진 개수
-        for(int k = 1; k <= num_of_all_pics ; k++){
-            if (pic_found < pics_array.length && pics_array[pic_found].substring(3,pics_array[pic_found].indexOf('_')).equals(Integer.toString(k))){
+        for (int k = 1 ; k <= num_of_all_pics ; k++) {
+            if (pic_found < pics_array.length && pics_array[pic_found].substring(3,pics_array[pic_found].indexOf('_')).equals(Integer.toString(k))) {
                 allPics_array.add(pics_array[pic_found]);
                 pic_found++;
-            } else if(url_found < URLs_array.length && URLs_array[url_found].substring(3,URLs_array[url_found].indexOf('_')).equals(Integer.toString(k))){
+            } else if (url_found < URLs_array.length && URLs_array[url_found].substring(3,URLs_array[url_found].indexOf('_')).equals(Integer.toString(k))) {
                 allPics_array.add(URLs_array[url_found]);
                 url_found++;
             }
         }
 
         image_preview = rootView.findViewById(R.id.image_preview);
-        for(String s : allPics_array){
+        for (String s : allPics_array) {
             // 이미지뷰 생성
             CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
             int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
@@ -138,7 +136,7 @@ public class ViewFragment extends Fragment {
             // 이미지 String 형식에서 picn_ 또는 URLn_ 부분을 제거
             final String string_image = s.substring(s.indexOf('_')+1);
 
-            if(s.substring(0,3).equals("pic")){ // 로컬 사진이면
+            if (s.substring(0,3).equals("pic")) { // 로컬 사진이면
                 // String to Byte 이미지 변환
                 byte[] bytes = Base64.decode(string_image,Base64.DEFAULT);
                 final Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
@@ -156,7 +154,7 @@ public class ViewFragment extends Fragment {
                 imageView.setImageBitmap(image);
                 image_preview.addView(imageView);
 
-            } else{  // URL 사진이면
+            } else {  // URL 사진이면
                 final RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
                 Glide.with(getContext()).load(string_image).apply(options).into(imageView); // 라이브러리: https://github.com/bumptech/glide
                 image_preview.addView(imageView);

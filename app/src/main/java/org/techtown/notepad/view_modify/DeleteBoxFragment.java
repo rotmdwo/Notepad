@@ -4,9 +4,7 @@ package org.techtown.notepad.view_modify;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +46,7 @@ public class DeleteBoxFragment extends Fragment {
                 Array_sort array_sort = new Array_sort();
                 String allNames_array[] = array_sort.setToArray(allNoteNmaes);
 
-                for(int i=0;i<allNames_array.length;i++){
+                for (int i=0 ; i<allNames_array.length ; i++) {
                     if(allNames_array[i].equals(name)){
                         location = i;
                     }

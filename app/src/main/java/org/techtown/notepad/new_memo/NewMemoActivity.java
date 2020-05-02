@@ -2,7 +2,6 @@ package org.techtown.notepad.new_memo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -26,9 +25,18 @@ public class NewMemoActivity extends AppCompatActivity {
         frg_newmemo = new NewMemoFragment(this);
         frg_backbox = new BackBoxFragment(this);
         frg_savebox = new SaveBoxFragment(mainContext, this);
-        manager.beginTransaction().add(R.id.frameLayout,frg_newmemo).add(R.id.frameLayout,frg_backbox).hide(frg_backbox).add(R.id.frameLayout,frg_savebox).hide(frg_savebox).commit();
+        manager.beginTransaction()
+                .add(R.id.frameLayout,frg_newmemo)
+                .add(R.id.frameLayout,frg_backbox)
+                .hide(frg_backbox)
+                .add(R.id.frameLayout,frg_savebox)
+                .hide(frg_savebox)
+                .commit();
 
-        Toast.makeText(getApplicationContext(),"첨부된 사진을 꾹 눌러 첨부를 취소할 수 있습니다.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),
+                "첨부된 사진을 꾹 눌러 첨부를 취소할 수 있습니다.",
+                Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override

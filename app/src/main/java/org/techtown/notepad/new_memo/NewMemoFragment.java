@@ -1,5 +1,10 @@
+/*
+* 사용한 라이브러리:
+* https://github.com/hdodenhof/CircleImageView
+* https://github.com/bumptech/glide
+* https://github.com/hdodenhof/CircleImageView
+*/
 package org.techtown.notepad.new_memo;
-
 
 import android.content.Context;
 import android.content.Intent;
@@ -83,7 +88,10 @@ public class NewMemoFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((NewMemoActivity) newMemoContext).manager.beginTransaction().show(((NewMemoActivity) newMemoContext).frg_backbox).commit();
+                ((NewMemoActivity) newMemoContext)
+                        .manager.beginTransaction()
+                        .show(((NewMemoActivity) newMemoContext).frg_backbox)
+                        .commit();
             }
         });
 
@@ -92,9 +100,13 @@ public class NewMemoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(title.getText().toString().equals("") || content.getText().toString().equals("")){
-                    Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT)
+                            .show();
                 } else{
-                    ((NewMemoActivity) newMemoContext).manager.beginTransaction().show(((NewMemoActivity) newMemoContext).frg_savebox).commit();
+                    ((NewMemoActivity) newMemoContext)
+                            .manager.beginTransaction()
+                            .show(((NewMemoActivity) newMemoContext).frg_savebox)
+                            .commit();
                 }
             }
         });
@@ -114,13 +126,14 @@ public class NewMemoFragment extends Fragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(file == null){
+                if (file == null) {
                     String filename = "temp.jpg";
                     File storageDir = Environment.getExternalStorageDirectory();
                     file = new File(storageDir,filename);
                 }
 
-                Uri fileUri = FileProvider.getUriForFile(getContext(),"org.techtown.notepad.intent.fileprovider",file);
+                Uri fileUri = FileProvider.getUriForFile(getContext(),
+                        "org.techtown.notepad.intent.fileprovider", file);
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
                 startActivityForResult(intent,103);
@@ -132,11 +145,14 @@ public class NewMemoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final String url = URL.getText().toString();
-                final CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+                final CircleImageView imageView = new CircleImageView(getContext());
+                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        90, getResources().getDisplayMetrics());
+                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        90, getResources().getDisplayMetrics());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        15, getResources().getDisplayMetrics());
                 params.rightMargin = margin;
                 params.gravity = Gravity.CENTER_VERTICAL;
                 imageView.setLayoutParams(params);
@@ -144,15 +160,20 @@ public class NewMemoFragment extends Fragment {
                 imageView.setBackgroundColor(0xFFFFFFFF);
                 imageView.setBorderColor(0xFF000000);
 
-                Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() { // 라이브러리: https://github.com/bumptech/glide
+                Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        Toast.makeText(getContext(),"잘못된 이미지 URL입니다.\n다시 한 번 확인해 주세요.", Toast.LENGTH_SHORT).show();
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                Target<Drawable> target, boolean isFirstResource) {
+                        Toast.makeText(getContext(),"잘못된 이미지 URL입니다.\n다시 한 번 확인해 주세요.",
+                                Toast.LENGTH_SHORT)
+                                .show();
+
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                                   DataSource dataSource, boolean isFirstResource) {
                         imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                             @Override
                             public boolean onLongClick(View v) {
@@ -167,20 +188,23 @@ public class NewMemoFragment extends Fragment {
                                     }
                                 }
 
-                                for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                // 로컬 사진들을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                for (int i = 0 ; i < pics.size() ; i++) {
                                     int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
                                     String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
-                                    if(num > id){
+                                    if (num > id) {
                                         pics.set(i, "pic"+(num-1)+"_"+string_image);
                                     }
                                 }
-                                for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                for (int i = 0 ; i < URLs.size() ; i++) {
                                     int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
                                     String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
-                                    if(num > id){
+                                    if (num > id) {
                                         URLs.set(i, "URL"+(num-1)+"_"+string_url);
                                     }
                                 }
+
                                 return false;
                             }
                         });
@@ -212,27 +236,29 @@ public class NewMemoFragment extends Fragment {
         ExifInterface exif = null;
         String imagePath = null;
 
-        if(requestCode == 101 && resultCode == RESULT_OK){  // 사진첨부 처리부분
+        if (requestCode == 101 && resultCode == RESULT_OK) {  // 사진첨부 처리부분
             Uri file;
 
             file = data.getData();
 
             String[] filePath = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContext().getContentResolver().query(file, filePath, null, null, null);
+            Cursor cursor = getContext()
+                    .getContentResolver()
+                    .query(file, filePath, null, null, null);
             cursor.moveToFirst();
             imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
             cursor.close();
         }
 
-        if(requestCode == 103 && resultCode == RESULT_OK){  // 사진찍기 처리부분
+        if (requestCode == 103 && resultCode == RESULT_OK) {  // 사진찍기 처리부분
             imagePath = file.getAbsolutePath();
         }
 
-        if((requestCode == 101 || requestCode == 103) && resultCode == RESULT_OK){  // 사진첨부와 사진찍기의 공통된 처리부분
+        if ((requestCode == 101 || requestCode == 103) && resultCode == RESULT_OK) {  // 사진첨부와 사진찍기의 공통된 처리부분
             // 사진이 돌아갔는지 확인하기 위해 사진의 정보 가져옴.
-            try{
+            try {
                 exif = new ExifInterface(imagePath);
-            } catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -240,27 +266,33 @@ public class NewMemoFragment extends Fragment {
             LoadPicture loadPicture = new LoadPicture();
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(imagePath,options);
-            options.inSampleSize = loadPicture.ResizeRatio(options.outWidth,options.outHeight,500,500);
+            BitmapFactory.decodeFile(imagePath, options);
+            options.inSampleSize = loadPicture.ResizeRatio(options.outWidth,options.outHeight,
+                    500,500);
             options.inJustDecodeBounds = false;
 
             // 사진이 회전 되어있다면 정방향으로 돌림
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
-            image = BitmapFactory.decodeFile(imagePath,options);
+            image = BitmapFactory.decodeFile(imagePath, options);
             image = loadPicture.rotate(image, loadPicture.exifOrientationToDegrees(orientation));
 
             // 사진을 String 형태로 전환
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             byte[] byteArray = bytes.toByteArray();
-            pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
+            pic = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
             // 이미지 미리보기 띄우기
-            CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
-            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
+            CircleImageView imageView = new CircleImageView(getContext());
+
+            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    90, getResources().getDisplayMetrics());
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    90, getResources().getDisplayMetrics());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-            int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
+            int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    15, getResources().getDisplayMetrics());
+
             params.rightMargin = margin;
             params.gravity = Gravity.CENTER_VERTICAL;
             imageView.setLayoutParams(params);
@@ -283,24 +315,28 @@ public class NewMemoFragment extends Fragment {
                     v.setVisibility(View.GONE);  // 해당 로컬사진을 미리보기에서 제거
                     num_of_pics--;
 
-                    for(int i = 0; i < pics.size() ; i++){  // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
+                    // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
+                    for (int i = 0; i < pics.size() ; i++) {
                         int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                        if(num == id){
+                        if (num == id) {
                             pics.remove(i);
                         }
                     }
 
-                    for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                    // 로컬 사진들을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                    for (int i = 0 ; i < pics.size() ; i++) {
                         int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
                         String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
                         if(num > id){
                             pics.set(i, "pic"+(num-1)+"_"+string_image);
                         }
                     }
-                    for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+
+                    // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                    for (int i = 0 ; i < URLs.size() ; i++) {
                         int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
                         String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
-                        if(num > id){
+                        if (num > id) {
                             URLs.set(i, "URL"+(num-1)+"_"+string_url);
                         }
                     }

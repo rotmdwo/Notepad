@@ -323,24 +323,24 @@ public class ModifyFragment extends Fragment {
                                 v.setVisibility(View.GONE);  // 해당 URL을 미리보기에서 제거
                                 num_of_urls--;
 
-                                for(int i = 0; i < URLs.size() ; i++){  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
+                                for (int i = 0 ; i < URLs.size() ; i++) {  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
                                     int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
                                     if(num == id){
                                         URLs.remove(i);
                                     }
                                 }
 
-                                for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                for (int i = 0 ; i < pics.size() ; i++) {  // 로컬 사진들을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
                                     int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
                                     String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
-                                    if(num > id){
+                                    if (num > id) {
                                         pics.set(i, "pic"+(num-1)+"_"+string_image);
                                     }
                                 }
-                                for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                for (int i = 0 ; i < URLs.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
                                     int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
                                     String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
-                                    if(num > id){
+                                    if (num > id) {
                                         URLs.set(i, "URL"+(num-1)+"_"+string_url);
                                     }
                                 }
@@ -374,7 +374,7 @@ public class ModifyFragment extends Fragment {
         ExifInterface exif = null;
         String imagePath = null;
 
-        if(requestCode == 101 && resultCode == RESULT_OK){  // 사진첨부 처리부분
+        if (requestCode == 101 && resultCode == RESULT_OK) {  // 사진첨부 처리부분
             Uri file;
 
             file = data.getData();
@@ -386,11 +386,11 @@ public class ModifyFragment extends Fragment {
             cursor.close();
         }
 
-        if(requestCode == 103 && resultCode == RESULT_OK){  // 사진찍기 처리부분
+        if (requestCode == 103 && resultCode == RESULT_OK) {  // 사진찍기 처리부분
             imagePath = file.getAbsolutePath();
         }
 
-        if((requestCode == 101 || requestCode == 103) && resultCode == RESULT_OK){  // 사진첨부와 사진찍기의 공통된 처리부분
+        if ((requestCode == 101 || requestCode == 103) && resultCode == RESULT_OK) {  // 사진첨부와 사진찍기의 공통된 처리부분
             // 사진이 돌아갔는지 확인하기 위해 사진의 정보 가져옴.
             try{
                 exif = new ExifInterface(imagePath);
@@ -447,22 +447,22 @@ public class ModifyFragment extends Fragment {
 
                     for(int i = 0; i < pics.size() ; i++){  // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
                         int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                        if(num == id){
+                        if (num == id) {
                             pics.remove(i);
                         }
                     }
 
-                    for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                    for (int i = 0 ; i < pics.size() ; i++) {  // 로컬 사진들을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
                         int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
                         String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
                         if(num > id){
                             pics.set(i, "pic"+(num-1)+"_"+string_image);
                         }
                     }
-                    for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                    for (int i = 0 ; i < URLs.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
                         int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
                         String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
-                        if(num > id){
+                        if (num > id) {
                             URLs.set(i, "URL"+(num-1)+"_"+string_url);
                         }
                     }

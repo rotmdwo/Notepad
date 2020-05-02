@@ -1,13 +1,13 @@
 package org.techtown.notepad.list;
 
-public class list_item {
+public class ListItem {
     Boolean isWebImage;
     String image_path;
     String title;
     String content;
     String time;
 
-    public list_item(Boolean isWebImage, String image_path, String title, String content, String time) {
+    public ListItem(Boolean isWebImage, String image_path, String title, String content, String time) {
         this.isWebImage = isWebImage;
         this.image_path = image_path;
         this.title = title;
