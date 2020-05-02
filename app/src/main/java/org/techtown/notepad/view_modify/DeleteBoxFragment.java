@@ -1,6 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,6 +22,12 @@ import java.util.Set;
 public class DeleteBoxFragment extends Fragment {
     DeleteBoxFragment mFragment;
     int location = 0;
+    Context mainContext;
+
+    public DeleteBoxFragment(Context mainContext) {
+        this.mainContext = mainContext;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,8 +58,8 @@ public class DeleteBoxFragment extends Fragment {
                 DataProcess.deleteNote(name,getContext());
                 DataProcess.saveNames(allNoteNmaes,getContext());
 
-                ((MainActivity)MainActivity.mContext).adapter.removeListItem(allNoteNmaes.size()-location);
-                ((MainActivity)MainActivity.mContext).recyclerView.setAdapter(((MainActivity)MainActivity.mContext).adapter);
+                ((MainActivity)mainContext).adapter.removeListItem(allNoteNmaes.size()-location);
+                ((MainActivity)mainContext).recyclerView.setAdapter(((MainActivity)mainContext).adapter);
 
                 getActivity().finish();
             }

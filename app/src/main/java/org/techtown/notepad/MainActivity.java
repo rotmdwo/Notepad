@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -25,15 +27,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener{ // 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
-    public static Context mContext;
     public RecyclerView recyclerView;
     public list_item_adapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mContext = this; // 어댑터에서 이 액티비티 사용하기 위해 컨텍스트 저장
 
         AutoPermissions.Companion.loadAllPermissions(this,102); // 자동권한요구 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
 
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), NewMemoActivity.class);
                 startActivity(intent);
-                ((MainActivity)MainActivity.mContext).overridePendingTransition(R.anim.anim_slide_in_left,R.anim.anim_not_move);
+                overridePendingTransition(R.anim.anim_slide_in_left,R.anim.anim_not_move);
             }
         });
 

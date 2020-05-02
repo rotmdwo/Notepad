@@ -2,6 +2,7 @@ package org.techtown.notepad.view_modify;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,6 +31,12 @@ public class SaveBoxFragment2 extends Fragment {
     SaveBoxFragment2 mFragment;
     Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
     int location=0;
+    Context mainContext;
+
+    public SaveBoxFragment2(Context mainContext) {
+        this.mainContext = mainContext;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -102,16 +109,16 @@ public class SaveBoxFragment2 extends Fragment {
         // 메인액티비티 리사이클러뷰 갱신
         if((ModifyFragment.mFragment).URLs.size() != 0 && (ModifyFragment.mFragment).URLs.get(0).substring(3,5).equals("1_")){  // URL 이미지가 1번일 때
             int _location = (ModifyFragment.mFragment).URLs.get(0).indexOf('_');
-            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(true,(ModifyFragment.mFragment).URLs.get(0).substring(_location+1),title,content,current_time),0);
+            ((MainActivity)mainContext).adapter.addListItem(new list_item(true,(ModifyFragment.mFragment).URLs.get(0).substring(_location+1),title,content,current_time),0);
         } else if((ModifyFragment.mFragment).pics.size() != 0 && (ModifyFragment.mFragment).pics.get(0).substring(3,5).equals("1_")){ // 로컬 이미지가 1번일 때
             int _location = (ModifyFragment.mFragment).pics.get(0).indexOf('_');
-            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,(ModifyFragment.mFragment).pics.get(0).substring(_location+1),title,content,current_time),0);
+            ((MainActivity)mainContext).adapter.addListItem(new list_item(false,(ModifyFragment.mFragment).pics.get(0).substring(_location+1),title,content,current_time),0);
         } else if((ModifyFragment.mFragment).URLs.size() == 0 && (ModifyFragment.mFragment).pics.size() == 0){  // 첨부된 이미지가 없을 때
-            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,"NO",title,content,current_time),0);
+            ((MainActivity)mainContext).adapter.addListItem(new list_item(false,"NO",title,content,current_time),0);
         }
 
-        ((MainActivity)MainActivity.mContext).adapter.removeListItem(names.size()-location);
-        ((MainActivity)MainActivity.mContext).recyclerView.setAdapter(((MainActivity)MainActivity.mContext).adapter);
+        ((MainActivity)mainContext).adapter.removeListItem(names.size()-location);
+        ((MainActivity)mainContext).recyclerView.setAdapter(((MainActivity)mainContext).adapter);
     }
 
     private String deleteName(){  // 노트 리스트에서 기존 작성했던 노트이름(마지막 수정시간)을 삭제

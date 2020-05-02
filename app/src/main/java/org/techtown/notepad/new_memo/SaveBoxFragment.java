@@ -2,6 +2,7 @@ package org.techtown.notepad.new_memo;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -29,6 +30,11 @@ import java.util.Set;
 public class SaveBoxFragment extends Fragment {
     SaveBoxFragment saveBoxFragment;
     Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
+    Context mainContext;
+
+    public SaveBoxFragment(Context mainContext) {
+        this.mainContext = mainContext;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,14 +104,14 @@ public class SaveBoxFragment extends Fragment {
         // 메인액티비티 리사이클러뷰 갱신
         if((NewMemoFragment.mFragment).URLs.size() != 0 && (NewMemoFragment.mFragment).URLs.get(0).substring(3,5).equals("1_")){  // URL 이미지가 1번일 때
             int _location = (NewMemoFragment.mFragment).URLs.get(0).indexOf('_');
-            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(true,(NewMemoFragment.mFragment).URLs.get(0).substring(_location+1),title,content,current_time),0);
+            ((MainActivity)mainContext).adapter.addListItem(new list_item(true,(NewMemoFragment.mFragment).URLs.get(0).substring(_location+1),title,content,current_time),0);
         } else if((NewMemoFragment.mFragment).pics.size() != 0 && (NewMemoFragment.mFragment).pics.get(0).substring(3,5).equals("1_")){ // 로컬 이미지가 1번일 때
             int _location = (NewMemoFragment.mFragment).pics.get(0).indexOf('_');
-            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,(NewMemoFragment.mFragment).pics.get(0).substring(_location+1),title,content,current_time),0);
+            ((MainActivity)mainContext).adapter.addListItem(new list_item(false,(NewMemoFragment.mFragment).pics.get(0).substring(_location+1),title,content,current_time),0);
         } else if((NewMemoFragment.mFragment).URLs.size() == 0 && (NewMemoFragment.mFragment).pics.size() == 0){  // 첨부된 이미지가 없을 때
-            ((MainActivity)MainActivity.mContext).adapter.addListItem(new list_item(false,"NO",title,content,current_time),0);
+            ((MainActivity)mainContext).adapter.addListItem(new list_item(false,"NO",title,content,current_time),0);
         }
-        ((MainActivity)MainActivity.mContext).recyclerView.setAdapter(((MainActivity)MainActivity.mContext).adapter);
+        ((MainActivity)mainContext).recyclerView.setAdapter(((MainActivity)mainContext).adapter);
 
     }
 

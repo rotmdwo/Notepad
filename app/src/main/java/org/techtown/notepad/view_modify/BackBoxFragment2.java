@@ -1,6 +1,7 @@
 package org.techtown.notepad.view_modify;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,7 +16,11 @@ import org.techtown.notepad.R;
 
 public class BackBoxFragment2 extends Fragment {
     BackBoxFragment2 mFragment;
+    Context mainContext;
 
+    public BackBoxFragment2(Context mainContext) {
+        this.mainContext = mainContext;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,8 +39,8 @@ public class BackBoxFragment2 extends Fragment {
                 // 이것을 해결하기 위해서는 UI fragment도 삭제하고 재할당
                 ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().show(((view_modifyActivity) view_modifyActivity.mContext).frg_view).hide(mFragment).remove(((view_modifyActivity) view_modifyActivity.mContext).frg_modify).remove(((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2).remove(((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2).commit();
                 ((view_modifyActivity) view_modifyActivity.mContext).frg_modify = new ModifyFragment();
-                ((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2 = new BackBoxFragment2();
-                ((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2 = new SaveBoxFragment2();
+                ((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2 = new BackBoxFragment2(mainContext);
+                ((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2 = new SaveBoxFragment2(mainContext);
                 ((view_modifyActivity) view_modifyActivity.mContext).manager.beginTransaction().add(R.id.frameLayout, ((view_modifyActivity) view_modifyActivity.mContext).frg_modify).hide(((view_modifyActivity) view_modifyActivity.mContext).frg_modify).add(R.id.frameLayout, ((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2).hide(((view_modifyActivity) view_modifyActivity.mContext).frg_backbox2).add(R.id.frameLayout, ((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2).hide(((view_modifyActivity) view_modifyActivity.mContext).frg_savebox2).commit();
             }
         });

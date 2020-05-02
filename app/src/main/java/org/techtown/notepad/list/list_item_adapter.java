@@ -29,10 +29,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.ViewHolder> {
     private ArrayList<list_item> items = new ArrayList<>();
-    Context context;
+    Context mainContext;
 
     public list_item_adapter(Context context) { // 생성자를 만들 때 Context를 안 넘겨주면 프래그먼트 나갔다가 들어올 때 마다 리사이클러뷰에 중복으로 쌓이는 버그 생김
-        this.context = context;
+        this.mainContext = context;
     }
 
     @NonNull
@@ -72,12 +72,12 @@ public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.Vi
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition() ;
-                    Intent intent = new Intent(MainActivity.mContext, view_modifyActivity.class);
+                    Intent intent = new Intent(mainContext, view_modifyActivity.class);
                     intent.putExtra("title",items.get(pos).getTitle());
                     intent.putExtra("content",items.get(pos).getContent());
                     intent.putExtra("name",items.get(pos).getTime());
-                    MainActivity.mContext.startActivity(intent);
-                    ((MainActivity)MainActivity.mContext).overridePendingTransition(R.anim.anim_slide_in_left,R.anim.anim_not_move);
+                    mainContext.startActivity(intent);
+                    ((MainActivity)mainContext).overridePendingTransition(R.anim.anim_slide_in_left,R.anim.anim_not_move);
                 }
             });
 
@@ -87,9 +87,9 @@ public class list_item_adapter extends RecyclerView.Adapter<list_item_adapter.Vi
             if(item.getWebImage()){ // 첫 번째 이미지가 웹이미지면
                 // error()를 쓰려면 RequestOptions 클래스를 사용해야함 -> https://stackoverflow.com/questions/47910536/glide-4-3-1-how-to-use-error
                 RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
-                Glide.with(MainActivity.mContext).load(item.image_path).apply(options).into(imageView);  // 라이브러리: https://github.com/bumptech/glide
+                Glide.with(mainContext).load(item.image_path).apply(options).into(imageView);  // 라이브러리: https://github.com/bumptech/glide
             } else if(item.image_path.equals("NO")){  // 저장된 이미지가 없다면
-                Drawable no_image = MainActivity.mContext.getDrawable(R.drawable.noimage);
+                Drawable no_image = mainContext.getDrawable(R.drawable.noimage);
                 imageView.setImageDrawable(no_image);
             }
             else{ // 첫 번째 이미지가 로컬 이미지이면
