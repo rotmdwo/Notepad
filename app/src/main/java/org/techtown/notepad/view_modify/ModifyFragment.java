@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -64,7 +65,6 @@ public class ModifyFragment extends Fragment {
     // 현재 노트에 로컬사진과 url 사진이 몇 개 있는지 저장
     int num_of_pics = 0;
     int num_of_urls = 0;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
