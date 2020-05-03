@@ -34,13 +34,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ViewFragment extends Fragment {
-    EditText title_view, content_view;
-    String name,title,content;
-    ArrayList<String> pics = new ArrayList<>();
-    ArrayList<String> URLs = new ArrayList<>();
-    LinearLayout image_preview;
-    ImageView big_preview;
-    Context viewModifyContext;
+    private EditText titleView, contentView;
+    private String name,title,content;
+    private ArrayList<String> pics = new ArrayList<>();
+    private ArrayList<String> urls = new ArrayList<>();
+    private LinearLayout imagePreview;
+    private ImageView bigPreview;
+    private Context viewModifyContext;
 
     public ViewFragment(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;
@@ -51,13 +51,13 @@ public class ViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_view, container, false);
 
-        big_preview = rootView.findViewById(R.id.big_preview);
+        bigPreview = rootView.findViewById(R.id.big_preview);
 
         final Button close_btn = rootView.findViewById(R.id.close);
         close_btn.setOnClickListener(new View.OnClickListener() { // 큰 사진보기를 닫는 버튼
             @Override
             public void onClick(View v) {
-                big_preview.setVisibility(View.INVISIBLE);
+                bigPreview.setVisibility(View.INVISIBLE);
                 close_btn.setVisibility(View.INVISIBLE);
             }
         });
@@ -79,10 +79,10 @@ public class ViewFragment extends Fragment {
         });
 
         Intent intent = getActivity().getIntent();
-        title_view = rootView.findViewById(R.id.title);
-        content_view = rootView.findViewById(R.id.content);
-        title_view.setText(intent.getStringExtra("title"));
-        content_view.setText(intent.getStringExtra("content"));
+        titleView = rootView.findViewById(R.id.title);
+        contentView = rootView.findViewById(R.id.content);
+        titleView.setText(intent.getStringExtra("title"));
+        contentView.setText(intent.getStringExtra("content"));
         name = intent.getStringExtra("name");  // 각 노트를 구별하는 시간 이름
 
         Set<String> note = DataProcess.restoreNote(name,getContext());
@@ -96,13 +96,13 @@ public class ViewFragment extends Fragment {
             } else if (temp.substring(0,3).equals("pic")) {
                 pics.add(temp);
             } else if (temp.substring(0,3).equals("URL")) {
-                URLs.add(temp);
+                urls.add(temp);
             }
         }
 
         Array_sort array_sort = new Array_sort();
         String pics_array[] = array_sort.arrayListToArrayForPic(pics);
-        String URLs_array[] = array_sort.arrayListToArrayForPic(URLs);
+        String URLs_array[] = array_sort.arrayListToArrayForPic(urls);
 
 
         ArrayList<String> allPics_array = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트
@@ -118,7 +118,7 @@ public class ViewFragment extends Fragment {
             }
         }
 
-        image_preview = rootView.findViewById(R.id.image_preview);
+        imagePreview = rootView.findViewById(R.id.image_preview);
         for (String s : allPics_array) {
             // 이미지뷰 생성
             CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
@@ -144,27 +144,27 @@ public class ViewFragment extends Fragment {
                 imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
                     @Override
                     public void onClick(View v) {
-                        big_preview.setVisibility(View.VISIBLE);
+                        bigPreview.setVisibility(View.VISIBLE);
                         close_btn.setVisibility(View.VISIBLE);
-                        big_preview.setImageBitmap(image);
+                        bigPreview.setImageBitmap(image);
                     }
                 });
 
                 // 미리보기에 추가
                 imageView.setImageBitmap(image);
-                image_preview.addView(imageView);
+                imagePreview.addView(imageView);
 
             } else {  // URL 사진이면
                 final RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
                 Glide.with(getContext()).load(string_image).apply(options).into(imageView); // 라이브러리: https://github.com/bumptech/glide
-                image_preview.addView(imageView);
+                imagePreview.addView(imageView);
 
                 imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
                     @Override
                     public void onClick(View v) {
-                        big_preview.setVisibility(View.VISIBLE);
+                        bigPreview.setVisibility(View.VISIBLE);
                         close_btn.setVisibility(View.VISIBLE);
-                        Glide.with(getContext()).load(string_image).apply(options).into(big_preview); // 라이브러리: https://github.com/bumptech/glide
+                        Glide.with(getContext()).load(string_image).apply(options).into(bigPreview); // 라이브러리: https://github.com/bumptech/glide
                     }
                 });
             }

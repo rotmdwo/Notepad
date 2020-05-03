@@ -12,19 +12,15 @@ import android.widget.Button;
 
 import org.techtown.notepad.classes_for_methods.Array_sort;
 import org.techtown.notepad.classes_for_methods.DataProcess;
-import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
 
 import java.util.Set;
 
 public class DeleteBoxFragment extends Fragment {
     DeleteBoxFragment mFragment;
-    int location = 0;
-    Context mainContext;
     Context viewModifyContext;
 
-    public DeleteBoxFragment(Context mainContext, Context viewModifyContext) {
-        this.mainContext = mainContext;
+    public DeleteBoxFragment(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;
     }
 
@@ -46,20 +42,11 @@ public class DeleteBoxFragment extends Fragment {
                 Array_sort array_sort = new Array_sort();
                 String allNames_array[] = array_sort.setToArray(allNoteNmaes);
 
-                for (int i=0 ; i<allNames_array.length ; i++) {
-                    if(allNames_array[i].equals(name)){
-                        location = i;
-                    }
-                }
-
                 allNoteNmaes.remove(name);
 
                 //SharedPreferences 삭제 및 갱신
-                DataProcess.deleteNote(name,getContext());
-                DataProcess.saveNames(allNoteNmaes,getContext());
-
-                ((MainActivity)mainContext).adapter.removeListItem(allNoteNmaes.size()-location);
-                ((MainActivity)mainContext).recyclerView.setAdapter(((MainActivity)mainContext).adapter);
+                DataProcess.deleteNote(name, getContext());
+                DataProcess.saveNames(allNoteNmaes, getContext());
 
                 getActivity().finish();
             }

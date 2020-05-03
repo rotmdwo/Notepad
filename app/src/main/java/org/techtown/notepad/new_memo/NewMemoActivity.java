@@ -3,6 +3,7 @@ package org.techtown.notepad.new_memo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -13,18 +14,16 @@ public class NewMemoActivity extends AppCompatActivity {
     BackBoxFragment frg_backbox;
     SaveBoxFragment frg_savebox;
     NewMemoFragment frg_newmemo;
-    Context mainContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_memo);
 
-        mainContext = getApplicationContext();
-
         manager= getSupportFragmentManager();
         frg_newmemo = new NewMemoFragment(this);
         frg_backbox = new BackBoxFragment(this);
-        frg_savebox = new SaveBoxFragment(mainContext, this);
+        frg_savebox = new SaveBoxFragment(this);
         manager.beginTransaction()
                 .add(R.id.frameLayout,frg_newmemo)
                 .add(R.id.frameLayout,frg_backbox)

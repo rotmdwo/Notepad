@@ -175,4 +175,5 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
     public void removeListItem(int index) {
         items.remove(index);
     }
+
 }

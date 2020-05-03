@@ -15,9 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.techtown.notepad.classes_for_methods.DataProcess;
-import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
-import org.techtown.notepad.list.ListItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,11 +28,9 @@ import java.util.Set;
 public class SaveBoxFragment extends Fragment {
     SaveBoxFragment saveBoxFragment;
     Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
-    Context mainContext;
     Context newMemoContext;
 
-    public SaveBoxFragment(Context mainContext, Context newMemoContext) {
-        this.mainContext = mainContext;
+    public SaveBoxFragment(Context newMemoContext) {
         this.newMemoContext = newMemoContext;
     }
 
@@ -59,12 +55,13 @@ public class SaveBoxFragment extends Fragment {
             public void onClick(View v) {
                 if (save_already_clicked == false) { // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
                     save_already_clicked = true;
-                    String title = ((NewMemoFragment)NewMemoFragment.mFragment).title.getText().toString();
-                    String content = ((NewMemoFragment)NewMemoFragment.mFragment).content.getText().toString();
+                    String title = (NewMemoFragment.mFragment).title.getText().toString();
+                    String content = (NewMemoFragment.mFragment).content.getText().toString();
 
                     saveNote(title,content,(NewMemoFragment.mFragment).pics, (NewMemoFragment.mFragment).URLs);
                     Toast.makeText(getActivity(),"저장 되었습니다.",Toast.LENGTH_SHORT).show();
                     getActivity().finish();
+
                 }
             }
         });
@@ -103,18 +100,6 @@ public class SaveBoxFragment extends Fragment {
         editor_note.putStringSet(current_time,note);
         editor_note.commit();
 
-        // 메인액티비티 리사이클러뷰 갱신
-        if ((NewMemoFragment.mFragment).URLs.size() != 0 && (NewMemoFragment.mFragment).URLs.get(0).substring(3,5).equals("1_")) {  // URL 이미지가 1번일 때
-            int _location = (NewMemoFragment.mFragment).URLs.get(0).indexOf('_');
-            ((MainActivity)mainContext).adapter.addListItem(new ListItem(true,(NewMemoFragment.mFragment).URLs.get(0).substring(_location+1),title,content,current_time),0);
-        } else if ((NewMemoFragment.mFragment).pics.size() != 0 && (NewMemoFragment.mFragment).pics.get(0).substring(3,5).equals("1_")) { // 로컬 이미지가 1번일 때
-            int _location = (NewMemoFragment.mFragment).pics.get(0).indexOf('_');
-            ((MainActivity)mainContext).adapter.addListItem(new ListItem(false,(NewMemoFragment.mFragment).pics.get(0).substring(_location+1),title,content,current_time),0);
-        } else if ((NewMemoFragment.mFragment).URLs.size() == 0 && (NewMemoFragment.mFragment).pics.size() == 0) {  // 첨부된 이미지가 없을 때
-            ((MainActivity)mainContext).adapter.addListItem(new ListItem(false,"NO",title,content,current_time),0);
-        }
-
-        ((MainActivity)mainContext).recyclerView.setAdapter(((MainActivity)mainContext).adapter);
 
     }
 }

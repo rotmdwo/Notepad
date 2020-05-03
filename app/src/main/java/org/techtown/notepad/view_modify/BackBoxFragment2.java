@@ -14,11 +14,9 @@ import org.techtown.notepad.R;
 
 public class BackBoxFragment2 extends Fragment {
     BackBoxFragment2 mFragment;
-    Context mainContext;
     Context viewModifyContext;
 
-    public BackBoxFragment2(Context mainContext, Context viewModifyContext) {
-        this.mainContext = mainContext;
+    public BackBoxFragment2(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;
     }
 
@@ -39,8 +37,8 @@ public class BackBoxFragment2 extends Fragment {
                 // 이것을 해결하기 위해서는 UI fragment도 삭제하고 재할당
                 ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_view).hide(mFragment).remove(((view_modifyActivity) viewModifyContext).frg_modify).remove(((view_modifyActivity) viewModifyContext).frg_backbox2).remove(((view_modifyActivity) viewModifyContext).frg_savebox2).commit();
                 ((view_modifyActivity) viewModifyContext).frg_modify = new ModifyFragment(viewModifyContext);
-                ((view_modifyActivity) viewModifyContext).frg_backbox2 = new BackBoxFragment2(mainContext, viewModifyContext);
-                ((view_modifyActivity) viewModifyContext).frg_savebox2 = new SaveBoxFragment2(mainContext, viewModifyContext);
+                ((view_modifyActivity) viewModifyContext).frg_backbox2 = new BackBoxFragment2(viewModifyContext);
+                ((view_modifyActivity) viewModifyContext).frg_savebox2 = new SaveBoxFragment2(viewModifyContext);
                 ((view_modifyActivity) viewModifyContext).manager.beginTransaction().add(R.id.frameLayout, ((view_modifyActivity) viewModifyContext).frg_modify).hide(((view_modifyActivity) viewModifyContext).frg_modify).add(R.id.frameLayout, ((view_modifyActivity) viewModifyContext).frg_backbox2).hide(((view_modifyActivity) viewModifyContext).frg_backbox2).add(R.id.frameLayout, ((view_modifyActivity) viewModifyContext).frg_savebox2).hide(((view_modifyActivity) viewModifyContext).frg_savebox2).commit();
             }
         });

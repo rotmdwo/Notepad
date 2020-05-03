@@ -45,6 +45,7 @@ import org.techtown.notepad.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -54,19 +55,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 public class ModifyFragment extends Fragment {
-    EditText title, content,URL;
-    static ModifyFragment mFragment;
-    LinearLayout image_preview;
-    File file;
-    Context viewModifyContext;
+    EditText title, content, URL;
+    private LinearLayout imagePreview;
+    private File file;
+    public static ModifyFragment mFragment;
+    private Context viewModifyContext;
 
     // 현재 노트에 첨부한 로컬사진의 byte to string 형식과 url 링크 저장
     ArrayList<String> pics = new ArrayList<>();
-    ArrayList<String> URLs = new ArrayList<>();
+    ArrayList<String> urls = new ArrayList<>();
 
     // 현재 노트에 로컬사진과 url 사진이 몇 개 있는지 저장
-    int num_of_pics = 0;
-    int num_of_urls = 0;
+    int numOfPics = 0;
+    int numOfUrls = 0;
 
     public ModifyFragment(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;
@@ -76,8 +77,10 @@ public class ModifyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_modify, container, false);
+
         mFragment = this;
-        image_preview = rootView.findViewById(R.id.image_preview);
+
+        imagePreview = rootView.findViewById(R.id.image_preview);
         URL = rootView.findViewById(R.id.URL);
 
         // 리스트로부터 받은 인텐트
@@ -95,35 +98,35 @@ public class ModifyFragment extends Fragment {
         // 노트에 저장된 사진들을 불러옴
         Set<String> note = DataProcess.restoreNote(name,getContext());
         Iterator<String> iterator_note = note.iterator();
-        while(iterator_note.hasNext()){
+        while (iterator_note.hasNext()) {
             String temp = iterator_note.next();
-            if(temp.substring(0,3).equals("pic")){
+            if (temp.substring(0,3).equals("pic")) {
                 pics.add(temp);
-            } else if(temp.substring(0,3).equals("URL")){
-                URLs.add(temp);
+            } else if (temp.substring(0,3).equals("URL")) {
+                urls.add(temp);
             }
         }
 
         // 로컬사진과 URL 사진의 개수
-        num_of_pics = pics.size();
-        num_of_urls = URLs.size();
+        numOfPics = pics.size();
+        numOfUrls = urls.size();
 
         Array_sort array_sort = new Array_sort();
         String pics_array[] = array_sort.arrayListToArrayForPic(pics);
-        String URLs_array[] = array_sort.arrayListToArrayForPic(URLs);
+        String URLs_array[] = array_sort.arrayListToArrayForPic(urls);
 
 
         // 정렬된 Array를 다시 ArrayList로 변환
-        for(int k = 0 ; k < num_of_pics ; k++){
+        for(int k = 0 ; k < numOfPics ; k++){
             pics.set(k, pics_array[k]);
         }
-        for(int k = 0 ; k < num_of_urls ; k++){
-            URLs.set(k, URLs_array[k]);
+        for(int k = 0 ; k < numOfUrls ; k++){
+            urls.set(k, URLs_array[k]);
         }
 
         // 순서대로 ImageView로 미리보기에 넣어줌
         int pic_found = 0, url_found = 0;
-        for(int k = 1 ; k <= num_of_urls + num_of_pics ; k++){
+        for(int k = 1 ; k <= numOfUrls + numOfPics ; k++){
             if (pic_found < pics_array.length && pics_array[pic_found].substring(3,pics_array[pic_found].indexOf('_')).equals(Integer.toString(k))){
                 // 이미지뷰 생성
                 CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
@@ -151,7 +154,7 @@ public class ModifyFragment extends Fragment {
                     public boolean onLongClick(View v) {
                         int id = v.getId();   // 해당 로컬사진의 ID 받아오기
                         v.setVisibility(View.GONE);  // 해당 로컬사진을 미리보기에서 제거
-                        num_of_pics--;
+                        numOfPics--;
 
                         for(int i = 0; i < pics.size() ; i++){  // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
                             int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
@@ -167,11 +170,11 @@ public class ModifyFragment extends Fragment {
                                 pics.set(i, "pic"+(num-1)+"_"+string_image);
                             }
                         }
-                        for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                            int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
-                            String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
+                        for(int i = 0 ; i < urls.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                            int num = Integer.parseInt(urls.get(i).substring(3, urls.get(i).indexOf('_')));
+                            String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
                             if(num > id){
-                                URLs.set(i, "URL"+(num-1)+"_"+string_url);
+                                urls.set(i, "URL"+(num-1)+"_"+string_url);
                             }
                         }
                         return false;
@@ -181,7 +184,7 @@ public class ModifyFragment extends Fragment {
                 // 미리보기에 추가
                 imageView.setImageBitmap(image);
                 imageView.setId(pic_found+url_found+1);
-                image_preview.addView(imageView);
+                imagePreview.addView(imageView);
 
                 pic_found++;
 
@@ -207,12 +210,12 @@ public class ModifyFragment extends Fragment {
                     public boolean onLongClick(View v) {
                         int id = v.getId();   // 해당 URL의 ID 받아오기
                         v.setVisibility(View.GONE);  // 해당 URL을 미리보기에서 제거
-                        num_of_urls--;
+                        numOfUrls--;
 
-                        for(int i = 0; i < URLs.size() ; i++){  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
-                            int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
+                        for(int i = 0; i < urls.size() ; i++){  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
+                            int num = Integer.parseInt(urls.get(i).substring(3, urls.get(i).indexOf('_')));
                             if(num == id){
-                                URLs.remove(i);
+                                urls.remove(i);
                             }
                         }
 
@@ -223,11 +226,11 @@ public class ModifyFragment extends Fragment {
                                 pics.set(i, "pic"+(num-1)+"_"+string_image);
                             }
                         }
-                        for(int i = 0 ; i < URLs.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                            int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
-                            String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
+                        for(int i = 0 ; i < urls.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                            int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
+                            String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
                             if(num > id){
-                                URLs.set(i, "URL"+(num-1)+"_"+string_url);
+                                urls.set(i, "URL"+(num-1)+"_"+string_url);
                             }
                         }
                         return false;
@@ -237,7 +240,7 @@ public class ModifyFragment extends Fragment {
                 RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
                 Glide.with(getContext()).load(string_image).apply(options).into(imageView);  // 라이브러리: https://github.com/bumptech/glide
                 imageView.setId(pic_found+url_found+1);
-                image_preview.addView(imageView);
+                imagePreview.addView(imageView);
 
                 url_found++;
             }
@@ -321,12 +324,12 @@ public class ModifyFragment extends Fragment {
                             public boolean onLongClick(View v) {
                                 int id = v.getId();   // 해당 URL의 ID 받아오기
                                 v.setVisibility(View.GONE);  // 해당 URL을 미리보기에서 제거
-                                num_of_urls--;
+                                numOfUrls--;
 
-                                for (int i = 0 ; i < URLs.size() ; i++) {  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
-                                    int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
+                                for (int i = 0 ; i < urls.size() ; i++) {  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
+                                    int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
                                     if(num == id){
-                                        URLs.remove(i);
+                                        urls.remove(i);
                                     }
                                 }
 
@@ -337,22 +340,22 @@ public class ModifyFragment extends Fragment {
                                         pics.set(i, "pic"+(num-1)+"_"+string_image);
                                     }
                                 }
-                                for (int i = 0 ; i < URLs.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                                    int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
-                                    String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
+                                for (int i = 0 ; i < urls.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                                    int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
+                                    String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
                                     if (num > id) {
-                                        URLs.set(i, "URL"+(num-1)+"_"+string_url);
+                                        urls.set(i, "URL"+(num-1)+"_"+string_url);
                                     }
                                 }
                                 return false;
                             }
                         });
-                        imageView.setId(num_of_pics+num_of_urls+1);
-                        image_preview.addView(imageView);
+                        imageView.setId(numOfPics + numOfUrls+1);
+                        imagePreview.addView(imageView);
 
                         // URLn_https:.. 형식으로 어레이리스트에 저장
-                        num_of_urls++;
-                        URLs.add("URL"+(num_of_pics+num_of_urls)+"_"+url);
+                        numOfUrls++;
+                        urls.add("URL"+(numOfPics + numOfUrls)+"_"+url);
 
                         URL.setText("");  // URL 입력화면 초기화
                         return false;
@@ -431,19 +434,19 @@ public class ModifyFragment extends Fragment {
             imageView.setBorderColor(0xFF000000);
 
             imageView.setImageBitmap(image);
-            imageView.setId(num_of_urls+num_of_pics+1);
-            image_preview.addView(imageView);
+            imageView.setId(numOfUrls+numOfPics+1);
+            imagePreview.addView(imageView);
 
             // 사진 string을 어레이 리스트에 저장
-            num_of_pics++;
-            pics.add("pic"+(num_of_pics+num_of_urls)+"_"+pic);
+            numOfPics++;
+            pics.add("pic"+(numOfPics + numOfUrls)+"_"+pic);
 
             imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                 @Override
                 public boolean onLongClick(View v) {
                     int id = v.getId();   // 해당 로컬사진의 ID 받아오기
                     v.setVisibility(View.GONE);  // 해당 로컬사진을 미리보기에서 제거
-                    num_of_pics--;
+                    numOfPics--;
 
                     for(int i = 0; i < pics.size() ; i++){  // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
                         int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
@@ -459,11 +462,11 @@ public class ModifyFragment extends Fragment {
                             pics.set(i, "pic"+(num-1)+"_"+string_image);
                         }
                     }
-                    for (int i = 0 ; i < URLs.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                        int num = Integer.parseInt(URLs.get(i).substring(3,URLs.get(i).indexOf('_')));
-                        String string_url = URLs.get(i).substring(URLs.get(i).indexOf('_')+1);
+                    for (int i = 0 ; i < urls.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
+                        int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
+                        String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
                         if (num > id) {
-                            URLs.set(i, "URL"+(num-1)+"_"+string_url);
+                            urls.set(i, "URL"+(num-1)+"_"+string_url);
                         }
                     }
                     return false;
