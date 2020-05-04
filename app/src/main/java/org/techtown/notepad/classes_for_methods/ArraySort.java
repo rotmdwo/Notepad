@@ -23,12 +23,12 @@ public class ArraySort {
     }
 
     public static String[] setToArray(Set<String> set) {
-        String sorted_array[] = new String[set.size()];
+        String sortedArray[] = new String[set.size()];
         int k = 0;
         for (String s : set) {
-            sorted_array[k++] = s;
+            sortedArray[k++] = s;
         }
-        java.util.Arrays.sort(sorted_array);
-        return sorted_array;
+        java.util.Arrays.sort(sortedArray);
+        return sortedArray;
     }
 }

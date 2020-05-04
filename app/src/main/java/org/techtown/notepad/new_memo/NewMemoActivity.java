@@ -20,15 +20,15 @@ public class NewMemoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_memo);
 
-        manager= getSupportFragmentManager();
+        manager = getSupportFragmentManager();
         frg_newmemo = new NewMemoFragment(this);
         frg_backbox = new BackBoxFragment(this);
         frg_savebox = new SaveBoxFragment(this);
         manager.beginTransaction()
-                .add(R.id.frameLayout,frg_newmemo)
-                .add(R.id.frameLayout,frg_backbox)
+                .add(R.id.frameLayout, frg_newmemo)
+                .add(R.id.frameLayout, frg_backbox)
                 .hide(frg_backbox)
-                .add(R.id.frameLayout,frg_savebox)
+                .add(R.id.frameLayout, frg_savebox)
                 .hide(frg_savebox)
                 .commit();
 

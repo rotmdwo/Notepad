@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LoadPicture {
@@ -36,7 +37,7 @@ public class LoadPicture {
     }
 
     public static Bitmap rotate(Bitmap bitmap, int degrees) {
-        if(degrees != 0 && bitmap != null) {
+        if (degrees != 0 && bitmap != null) {
             Matrix m = new Matrix();
             m.setRotate(degrees, (float) bitmap.getWidth() / 2,
                     (float) bitmap.getHeight() / 2);
@@ -44,7 +45,7 @@ public class LoadPicture {
             try {
                 Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0,
                         bitmap.getWidth(), bitmap.getHeight(), m, true);
-                if(bitmap != converted) {
+                if (bitmap != converted) {
                     bitmap.recycle();
                     bitmap = converted;
                 }
@@ -60,7 +61,7 @@ public class LoadPicture {
     public static int resizeRatio(int width, int height, int goal_width, int goal_height) {
         int ratio = 1;
 
-        while(width / (ratio+1) > goal_width && height / (ratio+1) > goal_height) {
+        while(width / (ratio + 1) > goal_width && height / (ratio + 1) > goal_height) {
             ratio++;
         }
 
@@ -69,7 +70,6 @@ public class LoadPicture {
 
     public static Bitmap compressPicture(String imagePath, ExifInterface exif) {
         Bitmap image;
-        String pic;
 
         // 메모리 초과 문제 해결하기 위해 이미지 압축
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -147,7 +147,7 @@ public class LoadPicture {
         numOfPics--;
 
         // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
-        for (int i = 0; i < pics.size() ; i++) {
+        for (int i = 0 ; i < pics.size() ; i++) {
             int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
             if (num == id) {
                 pics.remove(i);

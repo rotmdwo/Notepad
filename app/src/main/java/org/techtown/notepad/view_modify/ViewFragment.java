@@ -25,12 +25,16 @@ import com.bumptech.glide.request.RequestOptions;
 import org.techtown.notepad.classes_for_methods.ArraySort;
 import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.R;
+import org.techtown.notepad.classes_for_methods.LoadPicture;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static org.techtown.notepad.classes_for_methods.ArraySort.arrayListToArrayForPic;
+import static org.techtown.notepad.classes_for_methods.LoadPicture.getCircleImageView;
 
 
 public class ViewFragment extends Fragment {
@@ -53,12 +57,12 @@ public class ViewFragment extends Fragment {
 
         bigPreview = rootView.findViewById(R.id.big_preview);
 
-        final Button close_btn = rootView.findViewById(R.id.close);
-        close_btn.setOnClickListener(new View.OnClickListener() { // 큰 사진보기를 닫는 버튼
+        final Button closeBtn = rootView.findViewById(R.id.close);
+        closeBtn.setOnClickListener(new View.OnClickListener() { // 큰 사진보기를 닫는 버튼
             @Override
             public void onClick(View v) {
                 bigPreview.setVisibility(View.INVISIBLE);
-                close_btn.setVisibility(View.INVISIBLE);
+                closeBtn.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -100,51 +104,43 @@ public class ViewFragment extends Fragment {
             }
         }
 
-        String pics_array[] = ArraySort.arrayListToArrayForPic(pics);
-        String URLs_array[] = ArraySort.arrayListToArrayForPic(urls);
+        String picsArray[] = arrayListToArrayForPic(pics);
+        String urlsArray[] = arrayListToArrayForPic(urls);
 
 
-        ArrayList<String> allPics_array = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트
-        int num_of_all_pics = pics_array.length + URLs_array.length; // 전체 사진 수
-        int pic_found = 0, url_found = 0; // 현재까지 탐색된 로컬사진, url 사진 개수
-        for (int k = 1 ; k <= num_of_all_pics ; k++) {
-            if (pic_found < pics_array.length && pics_array[pic_found].substring(3,pics_array[pic_found].indexOf('_')).equals(Integer.toString(k))) {
-                allPics_array.add(pics_array[pic_found]);
-                pic_found++;
-            } else if (url_found < URLs_array.length && URLs_array[url_found].substring(3,URLs_array[url_found].indexOf('_')).equals(Integer.toString(k))) {
-                allPics_array.add(URLs_array[url_found]);
-                url_found++;
+        ArrayList<String> allPicsArray = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트
+        int numOfAllPics = picsArray.length + urlsArray.length; // 전체 사진 수
+        int picFound = 0, urlFound = 0; // 현재까지 탐색된 로컬사진, url 사진 개수
+        for (int k = 1 ; k <= numOfAllPics ; k++) {
+            if (picFound < picsArray.length
+                    && picsArray[picFound].substring(3, picsArray[picFound].indexOf('_')).equals(Integer.toString(k))) {
+                allPicsArray.add(picsArray[picFound]);
+                picFound++;
+            } else if (urlFound < urlsArray.length
+                    && urlsArray[urlFound].substring(3, urlsArray[urlFound].indexOf('_')).equals(Integer.toString(k))) {
+                allPicsArray.add(urlsArray[urlFound]);
+                urlFound++;
             }
         }
 
         imagePreview = rootView.findViewById(R.id.image_preview);
-        for (String s : allPics_array) {
+        for (String s : allPicsArray) {
             // 이미지뷰 생성
-            CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
-            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-            int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
-            params.rightMargin = margin;
-            params.gravity = Gravity.CENTER_VERTICAL;
-            imageView.setLayoutParams(params);
-            imageView.setBorderWidth(1);
-            imageView.setBackgroundColor(0xFFFFFFFF);
-            imageView.setBorderColor(0xFF000000);
+            CircleImageView imageView = getCircleImageView(getContext());
 
             // 이미지 String 형식에서 picn_ 또는 URLn_ 부분을 제거
-            final String string_image = s.substring(s.indexOf('_')+1);
+            final String string_image = s.substring(s.indexOf('_') + 1);
 
-            if (s.substring(0,3).equals("pic")) { // 로컬 사진이면
+            if (s.substring(0, 3).equals("pic")) { // 로컬 사진이면
                 // String to Byte 이미지 변환
                 byte[] bytes = Base64.decode(string_image,Base64.DEFAULT);
-                final Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                final Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
                 imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
                     @Override
                     public void onClick(View v) {
                         bigPreview.setVisibility(View.VISIBLE);
-                        close_btn.setVisibility(View.VISIBLE);
+                        closeBtn.setVisibility(View.VISIBLE);
                         bigPreview.setImageBitmap(image);
                     }
                 });
@@ -155,15 +151,21 @@ public class ViewFragment extends Fragment {
 
             } else {  // URL 사진이면
                 final RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
-                Glide.with(getContext()).load(string_image).apply(options).into(imageView); // 라이브러리: https://github.com/bumptech/glide
+                Glide.with(getContext())
+                        .load(string_image)
+                        .apply(options)
+                        .into(imageView); // 라이브러리: https://github.com/bumptech/glide
                 imagePreview.addView(imageView);
 
                 imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
                     @Override
                     public void onClick(View v) {
                         bigPreview.setVisibility(View.VISIBLE);
-                        close_btn.setVisibility(View.VISIBLE);
-                        Glide.with(getContext()).load(string_image).apply(options).into(bigPreview); // 라이브러리: https://github.com/bumptech/glide
+                        closeBtn.setVisibility(View.VISIBLE);
+                        Glide.with(getContext())
+                                .load(string_image)
+                                .apply(options)
+                                .into(bigPreview); // 라이브러리: https://github.com/bumptech/glide
                     }
                 });
             }

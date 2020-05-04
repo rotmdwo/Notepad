@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,17 +52,17 @@ import static android.app.Activity.RESULT_OK;
 public class NewMemoFragment extends Fragment {
     EditText title, content, URL;
     static NewMemoFragment mFragment;
-    LinearLayout image_preview;
+    LinearLayout imagePreview;
     File file;
     Context newMemoContext;
 
     // 현재 노트에 첨부한 로컬사진의 byte to string 형식과 url 링크 저장
     ArrayList<String> pics = new ArrayList<>();
-    ArrayList<String> URLs = new ArrayList<>();
+    ArrayList<String> urls = new ArrayList<>();
 
     // 현재 노트에 로컬사진과 url 사진이 몇 개 있는지 저장
-    int num_of_pics = 0;
-    int num_of_urls = 0;
+    int numOfPics = 0;
+    int numOfUrls = 0;
 
     public NewMemoFragment(Context newMemoContext) {
         this.newMemoContext = newMemoContext;
@@ -75,7 +74,7 @@ public class NewMemoFragment extends Fragment {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_new_memo, container, false);
         mFragment = this;
-        image_preview = rootView.findViewById(R.id.image_preview);
+        imagePreview = rootView.findViewById(R.id.image_preview);
 
         title = rootView.findViewById(R.id.title);
         content = rootView.findViewById(R.id.content);
@@ -97,7 +96,7 @@ public class NewMemoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(title.getText().toString().equals("") || content.getText().toString().equals("")){
-                    Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT)
+                    Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.", Toast.LENGTH_SHORT)
                             .show();
                 } else{
                     ((NewMemoActivity) newMemoContext)
@@ -115,7 +114,7 @@ public class NewMemoFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent,101);
+                startActivityForResult(intent, LoadPicture.ATTACH_PICTURE);
             }
         });
 
@@ -133,7 +132,7 @@ public class NewMemoFragment extends Fragment {
                         "org.techtown.notepad.intent.fileprovider", file);
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
-                startActivityForResult(intent,103);
+                startActivityForResult(intent, LoadPicture.TAKE_PICTURE);
             }
         });
 
@@ -161,17 +160,21 @@ public class NewMemoFragment extends Fragment {
                         imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                             @Override
                             public boolean onLongClick(View v) {
-                                num_of_urls = LoadPicture.deleteUrl(v, num_of_urls, URLs, pics);
+                                /*
+                                * ArrayList들은 메소드에 주소를 넘겨주기 때문에 메소드 안에서도 값이 변하지만
+                                * int는 값 자체를 넘겨주기 때문에 업데이트 된 값을 return으로 받아야 한다.
+                                */
+                                numOfUrls = LoadPicture.deleteUrl(v, numOfUrls, urls, pics);
 
                                 return false;
                             }
                         });
-                        imageView.setId(num_of_pics+num_of_urls+1);
-                        image_preview.addView(imageView);
+                        imageView.setId(numOfPics + numOfUrls + 1);
+                        imagePreview.addView(imageView);
 
                         // URLn_https:.. 형식으로 어레이리스트에 저장
-                        num_of_urls++;
-                        URLs.add("URL"+(num_of_pics+num_of_urls)+"_"+url);
+                        numOfUrls++;
+                        urls.add("URL" + (numOfPics + numOfUrls) + "_" + url);
 
                         URL.setText("");  // URL 입력화면 초기화
                         return false;
@@ -189,30 +192,37 @@ public class NewMemoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String pic = null;
-        Bitmap image = null;
+        String pic;
+        Bitmap image;
         ExifInterface exif = null;
         String imagePath = null;
 
         if (requestCode == LoadPicture.ATTACH_PICTURE && resultCode == RESULT_OK) {  // 사진첨부 처리부분
             Uri file;
 
-            file = data.getData();
+            try {
+                file = data.getData();
 
-            String[] filePath = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContext()
-                    .getContentResolver()
-                    .query(file, filePath, null, null, null);
-            cursor.moveToFirst();
-            imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-            cursor.close();
+                String[] filePath = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContext()
+                                .getContentResolver()
+                                .query(file, filePath, null, null, null);
+                cursor.moveToFirst();
+
+                imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+                cursor.close();
+
+            } catch (NullPointerException e) {
+                e.getStackTrace();
+            }
         }
 
         if (requestCode == LoadPicture.TAKE_PICTURE && resultCode == RESULT_OK) {  // 사진찍기 처리부분
             imagePath = file.getAbsolutePath();
         }
 
-        if ((requestCode == LoadPicture.ATTACH_PICTURE || requestCode == LoadPicture.TAKE_PICTURE) && resultCode == RESULT_OK) {  // 사진첨부와 사진찍기의 공통된 처리부분
+        // 사진첨부와 사진찍기의 공통된 처리부분
+        if ((requestCode == LoadPicture.ATTACH_PICTURE || requestCode == LoadPicture.TAKE_PICTURE) && resultCode == RESULT_OK) {
             // 사진이 돌아갔는지 확인하기 위해 사진의 정보 가져옴.
             try {
                 exif = new ExifInterface(imagePath);
@@ -232,17 +242,17 @@ public class NewMemoFragment extends Fragment {
             CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
             imageView.setImageBitmap(image);
-            imageView.setId(num_of_urls+num_of_pics+1);
-            image_preview.addView(imageView);
+            imageView.setId(numOfUrls + numOfPics + 1);
+            imagePreview.addView(imageView);
 
             // 사진 string을 어레이 리스트에 저장
-            num_of_pics++;
-            pics.add("pic"+(num_of_pics+num_of_urls)+"_"+pic);
+            numOfPics++;
+            pics.add("pic" + (numOfPics + numOfUrls) + "_" + pic);
 
             imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                 @Override
                 public boolean onLongClick(View v) {
-                    num_of_pics = LoadPicture.deletePicture(v, num_of_pics, URLs, pics);
+                    numOfPics = LoadPicture.deletePicture(v, numOfPics, urls, pics);
 
                     return false;
                 }

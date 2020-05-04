@@ -28,7 +28,7 @@ public class BackBoxFragment extends Fragment {
         backBoxFragment = this;
 
         Button exit = rootView.findViewById(R.id.exit);
-        Button keep_writing = rootView.findViewById(R.id.keep_writing);
+        Button keepWriting = rootView.findViewById(R.id.keep_writing);
         exit.setOnClickListener(new View.OnClickListener() {  // 정말로 나가기
             @Override
             public void onClick(View v) {
@@ -36,7 +36,7 @@ public class BackBoxFragment extends Fragment {
             }
         });
 
-        keep_writing.setOnClickListener(new View.OnClickListener() {  // 나가지 않고 계속 쓰기
+        keepWriting.setOnClickListener(new View.OnClickListener() {  // 나가지 않고 계속 쓰기
             @Override
             public void onClick(View v) {
                 ((NewMemoActivity) newMemoContext)

@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import org.techtown.notepad.MainActivity;
 import org.techtown.notepad.R;
+import org.techtown.notepad.classes_for_methods.TImeUtility;
 import org.techtown.notepad.view_modify.view_modifyActivity;
 
 import java.text.SimpleDateFormat;
@@ -100,66 +101,23 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
 
                 RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
                 Glide.with(mainContext)
-                        .load(item.image_path)
+                        .load(item.imagePath)
                         .apply(options)
                         .into(imageView);
-            } else if (item.image_path.equals("NO")) {  // 저장된 이미지가 없다면
-                Drawable no_image = mainContext.getDrawable(R.drawable.noimage);
-                imageView.setImageDrawable(no_image);
+            } else if (item.imagePath.equals("NO")) {  // 저장된 이미지가 없다면
+                Drawable noImage = mainContext.getDrawable(R.drawable.noimage);
+                imageView.setImageDrawable(noImage);
             }
             else { // 첫 번째 이미지가 로컬 이미지이면
-                byte[] bytes = Base64.decode(item.getImage_path(),Base64.DEFAULT);
-                Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                byte[] bytes = Base64.decode(item.getImagePath(), Base64.DEFAULT);
+                Bitmap image = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
                 imageView.setImageBitmap(image);
             }
 
             textView.setText(item.getTitle());
             textView2.setText(item.getContent());
 
-            // 마지막 수정시간 계산
-            Date date = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-            String current_date = format.format(date);
-            String then_date = item.getTime();
-            int current_year = Integer.parseInt(current_date.substring(0, 4));
-            int then_year = Integer.parseInt(then_date.substring(0, 4));
-            int current_month = Integer.parseInt(current_date.substring(4, 6));
-            int then_month = Integer.parseInt(then_date.substring(4, 6));
-            int current_day = Integer.parseInt(current_date.substring(6, 8));
-            int then_day = Integer.parseInt(then_date.substring(6, 8));
-            int current_hour = Integer.parseInt(current_date.substring(8, 10));
-            int then_hour = Integer.parseInt(then_date.substring(8, 10));
-            int current_minute = Integer.parseInt(current_date.substring(10, 12));
-            int then_minute = Integer.parseInt(then_date.substring(10, 12));
-            int current_second = Integer.parseInt(current_date.substring(12, 14));
-            int then_second = Integer.parseInt(then_date.substring(12, 14));
-
-            if ((current_year-then_year>=2) || (current_year - then_year == 1
-                    && current_month - then_month >= 0)) {
-                time.setText(current_year-then_year+"년 전");
-            } else if (current_year - then_year == 1 && current_month - then_month < 0) {
-                time.setText(current_month + 12 - then_month+"달 전");
-            } else if ((current_month-then_month>=2) || (current_month - then_month == 1
-                    && current_day - then_day >= 0)) {
-                time.setText(current_month-then_month+"달 전");
-            } else if (current_month - then_month == 1 && current_day - then_day < 0) {
-                time.setText(current_day + 30 - then_day+"일 전");
-            } else if ((current_day-then_day>=2) || (current_day - then_day == 1
-                    && current_hour - then_hour >= 0)) {
-                time.setText(current_day-then_day+"일 전");
-            } else if (current_day - then_day == 1 && current_hour - then_hour < 0) {
-                time.setText(current_hour + 24 - then_hour+"시간 전");
-            } else if ((current_hour-then_hour>=2) || (current_hour - then_hour == 1
-                    && current_minute - then_minute >= 0)) {
-                time.setText(current_hour-then_hour+"시간 전");
-            } else if (current_hour - then_hour == 1 && current_minute - then_minute < 0) {
-                time.setText(current_minute + 60 - then_minute+"분 전");
-            } else if ((current_minute-then_minute>=2) || (current_minute - then_minute == 1
-                    && current_second - then_second >= 0)) {
-                time.setText(current_minute-then_minute+"분 전");
-            } else {
-                time.setText("방금 전");
-            }
+            TImeUtility.setTime(time, item);
         }
 
     }

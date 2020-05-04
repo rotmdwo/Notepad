@@ -81,21 +81,21 @@ public class ModifyFragment extends Fragment {
 
         // 리스트로부터 받은 인텐트
         Intent intent = getActivity().getIntent();
-        String title_string = intent.getStringExtra("title");
-        String content_string = intent.getStringExtra("content");
+        String titleString = intent.getStringExtra("title");
+        String contentString = intent.getStringExtra("content");
         String name = intent.getStringExtra("name");
 
         // 제목과 내용 불러와 설정
         title = rootView.findViewById(R.id.title);
         content = rootView.findViewById(R.id.content);
-        title.setText(title_string);
-        content.setText(content_string);
+        title.setText(titleString);
+        content.setText(contentString);
 
         // 노트에 저장된 사진들을 불러옴
         Set<String> note = DataProcess.restoreNote(name,getContext());
-        Iterator<String> iterator_note = note.iterator();
-        while (iterator_note.hasNext()) {
-            String temp = iterator_note.next();
+        Iterator<String> iteratorNote = note.iterator();
+        while (iteratorNote.hasNext()) {
+            String temp = iteratorNote.next();
             if (temp.substring(0,3).equals("pic")) {
                 pics.add(temp);
             } else if (temp.substring(0,3).equals("URL")) {
@@ -107,30 +107,31 @@ public class ModifyFragment extends Fragment {
         numOfPics = pics.size();
         numOfUrls = urls.size();
 
-        String pics_array[] = ArraySort.arrayListToArrayForPic(pics);
-        String URLs_array[] = ArraySort.arrayListToArrayForPic(urls);
+        String picsArray[] = ArraySort.arrayListToArrayForPic(pics);
+        String urlsArray[] = ArraySort.arrayListToArrayForPic(urls);
 
         // 정렬된 Array를 다시 ArrayList로 변환
         for(int k = 0 ; k < numOfPics ; k++){
-            pics.set(k, pics_array[k]);
+            pics.set(k, picsArray[k]);
         }
         for(int k = 0 ; k < numOfUrls ; k++){
-            urls.set(k, URLs_array[k]);
+            urls.set(k, urlsArray[k]);
         }
 
         // 순서대로 ImageView로 미리보기에 넣어줌
-        int pic_found = 0, url_found = 0;
+        int picFound = 0, urlFound = 0;
         for(int k = 1 ; k <= numOfUrls + numOfPics ; k++){
-            if (pic_found < pics_array.length && pics_array[pic_found].substring(3,pics_array[pic_found].indexOf('_')).equals(Integer.toString(k))){
+            if (picFound < picsArray.length
+                    && picsArray[picFound].substring(3, picsArray[picFound].indexOf('_')).equals(Integer.toString(k))){
                 // 이미지뷰 생성
                 CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
                 // 이미지 String 형식에서 picn_ 부분을 제거
-                String string_image = pics_array[pic_found].substring(pics_array[pic_found].indexOf('_')+1);
+                String string_image = picsArray[picFound].substring(picsArray[picFound].indexOf('_') + 1);
 
                 // String to Byte 이미지 변환
                 byte[] bytes = Base64.decode(string_image,Base64.DEFAULT);
-                Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
                 // 사진을 길게 눌렀을시 첨부를 취소
                 imageView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -144,17 +145,18 @@ public class ModifyFragment extends Fragment {
 
                 // 미리보기에 추가
                 imageView.setImageBitmap(image);
-                imageView.setId(pic_found+url_found+1);
+                imageView.setId(picFound + urlFound + 1);
                 imagePreview.addView(imageView);
 
-                pic_found++;
+                picFound++;
 
-            } else if(url_found < URLs_array.length && URLs_array[url_found].substring(3,URLs_array[url_found].indexOf('_')).equals(Integer.toString(k))){
+            } else if(urlFound < urlsArray.length
+                    && urlsArray[urlFound].substring(3, urlsArray[urlFound].indexOf('_')).equals(Integer.toString(k))){
                 // 이미지뷰 생성
                 CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
                 // 이미지 String 형식에서 URLn_ 부분을 제거
-                String string_image = URLs_array[url_found].substring(URLs_array[url_found].indexOf('_')+1);
+                String stringImage = urlsArray[urlFound].substring(urlsArray[urlFound].indexOf('_') + 1);
 
                 imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                     @Override
@@ -166,11 +168,11 @@ public class ModifyFragment extends Fragment {
                 });
 
                 RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
-                Glide.with(getContext()).load(string_image).apply(options).into(imageView);  // 라이브러리: https://github.com/bumptech/glide
-                imageView.setId(pic_found+url_found+1);
+                Glide.with(getContext()).load(stringImage).apply(options).into(imageView);  // 라이브러리: https://github.com/bumptech/glide
+                imageView.setId(picFound + urlFound + 1);
                 imagePreview.addView(imageView);
 
-                url_found++;
+                urlFound++;
             }
         }
 
@@ -178,7 +180,9 @@ public class ModifyFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_backbox2).commit();
+                ((view_modifyActivity) viewModifyContext).manager
+                        .beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_backbox2)
+                        .commit();
             }
         });
 
@@ -186,10 +190,12 @@ public class ModifyFragment extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(title.getText().toString().equals("") || content.getText().toString().equals("")){
+                if (title.getText().toString().equals("") || content.getText().toString().equals("")) {
                     Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT).show();
-                } else{
-                    ((view_modifyActivity) viewModifyContext).manager.beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_savebox2).commit();
+                } else {
+                    ((view_modifyActivity) viewModifyContext).manager
+                            .beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_savebox2)
+                            .commit();
                 }
             }
         });
@@ -200,7 +206,7 @@ public class ModifyFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent,101);
+                startActivityForResult(intent,LoadPicture.ATTACH_PICTURE);
             }
         });
 
@@ -214,10 +220,10 @@ public class ModifyFragment extends Fragment {
                     file = new File(storageDir,filename);
                 }
 
-                Uri fileUri = FileProvider.getUriForFile(getContext(),"org.techtown.notepad.intent.fileprovider",file);
+                Uri fileUri = FileProvider.getUriForFile(getContext(), "org.techtown.notepad.intent.fileprovider", file);
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
-                startActivityForResult(intent,103);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                startActivityForResult(intent, LoadPicture.TAKE_PICTURE);
             }
         });
 
@@ -236,7 +242,8 @@ public class ModifyFragment extends Fragment {
                     }
 
                     @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                                   DataSource dataSource, boolean isFirstResource) {
                         imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                             @Override
                             public boolean onLongClick(View v) {
@@ -245,12 +252,12 @@ public class ModifyFragment extends Fragment {
                                 return false;
                             }
                         });
-                        imageView.setId(numOfPics + numOfUrls+1);
+                        imageView.setId(numOfPics + numOfUrls + 1);
                         imagePreview.addView(imageView);
 
                         // URLn_https:.. 형식으로 어레이리스트에 저장
                         numOfUrls++;
-                        urls.add("URL"+(numOfPics + numOfUrls)+"_"+url);
+                        urls.add("URL" + (numOfPics + numOfUrls) + "_" + url);
 
                         URL.setText("");  // URL 입력화면 초기화
                         return false;
@@ -267,21 +274,26 @@ public class ModifyFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String pic = null;
-        Bitmap image = null;
+        String pic;
+        Bitmap image;
         ExifInterface exif = null;
         String imagePath = null;
 
         if (requestCode == LoadPicture.ATTACH_PICTURE && resultCode == RESULT_OK) {  // 사진첨부 처리부분
             Uri file;
 
-            file = data.getData();
+            try {
+                file = data.getData();
 
-            String[] filePath = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContext().getContentResolver().query(file, filePath, null, null, null);
-            cursor.moveToFirst();
-            imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-            cursor.close();
+                String[] filePath = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContext().getContentResolver().query(file, filePath, null, null, null);
+                cursor.moveToFirst();
+                imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+                cursor.close();
+
+            } catch (NullPointerException e) {
+                e.getStackTrace();
+            }
         }
 
         if (requestCode == LoadPicture.TAKE_PICTURE && resultCode == RESULT_OK) {  // 사진찍기 처리부분

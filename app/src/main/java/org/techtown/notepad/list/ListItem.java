@@ -2,14 +2,14 @@ package org.techtown.notepad.list;
 
 public class ListItem {
     Boolean isWebImage;
-    String image_path;
+    String imagePath;
     String title;
     String content;
     String time;
 
-    public ListItem(Boolean isWebImage, String image_path, String title, String content, String time) {
+    public ListItem(Boolean isWebImage, String imagePath, String title, String content, String time) {
         this.isWebImage = isWebImage;
-        this.image_path = image_path;
+        this.imagePath = imagePath;
         this.title = title;
         this.content = content;
         this.time = time;
@@ -23,12 +23,12 @@ public class ListItem {
         isWebImage = webImage;
     }
 
-    public String getImage_path() {
-        return image_path;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage_path(String image_path) {
-        this.image_path = image_path;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getTitle() {
