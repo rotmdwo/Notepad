@@ -1,5 +1,10 @@
 package org.techtown.notepad;
 
+/*
+ * 사용된 라이브러리:
+ * https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
+ */
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,10 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import static org.techtown.notepad.classes_for_methods.DataProcess.restoreNames;
-import static org.techtown.notepad.classes_for_methods.DataProcess.restoreNote;
-
-public class MainActivity extends AppCompatActivity implements AutoPermissionsListener { // 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
+public class MainActivity extends AppCompatActivity implements AutoPermissionsListener {
     public RecyclerView recyclerView;
     public ListItemAdapter adapter;
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AutoPermissions.Companion.loadAllPermissions(this, AUTO_PERMISSION); // 자동권한요구 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
+        AutoPermissions.Companion.loadAllPermissions(this, AUTO_PERMISSION);
 
         // 어댑터와 리사이클러뷰 설정
         adapter = new ListItemAdapter(this);
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        AutoPermissions.Companion.parsePermissions(this,requestCode,permissions,this); // 라이브러리: https://github.com/pedroSG94/AutoPermissions/tree/master/app/src/main/java/com/pedro/autopermissions
+        AutoPermissions.Companion.parsePermissions(this,requestCode,permissions,this);
     }
     @Override
     public void onDenied(int i, String[] strings) {
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         adapter.notifyDataSetChanged();
 
         // 최근 저장한 노트를 가장 위로 올라오게 하기 위해 Set -> Array로 만든 후 시간순으로 정렬 후 array의 뒤에서부터 가져온다.
-        Set<String> allNames = restoreNames(this);
+        Set<String> allNames = DataProcess.restoreNames(this);
         String allNamesArray[] = ArraySort.setToArray(allNames);
 
         for (int l = allNamesArray.length - 1 ; l >= 0 ; l--) {
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             ArrayList<String> urls = new ArrayList<>();
 
             String name = allNamesArray[l];
-            Set<String> note = restoreNote(name, getApplicationContext());
+            Set<String> note = DataProcess.restoreNote(name, getApplicationContext());
             Iterator<String> iterator_note = note.iterator();
             while (iterator_note.hasNext()) {
                 String temp = iterator_note.next();

@@ -1,5 +1,9 @@
 package org.techtown.notepad.view_modify;
 
+/*
+ * 사용된 라이브러리:
+ * https://github.com/bumptech/glide
+ */
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +12,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.util.Base64;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +34,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static org.techtown.notepad.classes_for_methods.ArraySort.arrayListToArrayForPic;
-import static org.techtown.notepad.classes_for_methods.LoadPicture.getCircleImageView;
 
 
 public class ViewFragment extends Fragment {
@@ -93,19 +92,19 @@ public class ViewFragment extends Fragment {
         Iterator<String> iterator_note = note.iterator();
         while (iterator_note.hasNext()) {
             String temp = iterator_note.next();
-            if (temp.substring(0,5).equals("title")) {
+            if (temp.substring(0, 5).equals("title")) {
                 title = temp.substring(6);
-            } else if (temp.substring(0,7).equals("content")) {
+            } else if (temp.substring(0, 7).equals("content")) {
                 content = temp.substring(8);
-            } else if (temp.substring(0,3).equals("pic")) {
+            } else if (temp.substring(0, 3).equals("pic")) {
                 pics.add(temp);
-            } else if (temp.substring(0,3).equals("URL")) {
+            } else if (temp.substring(0, 3).equals("URL")) {
                 urls.add(temp);
             }
         }
 
-        String picsArray[] = arrayListToArrayForPic(pics);
-        String urlsArray[] = arrayListToArrayForPic(urls);
+        String picsArray[] = ArraySort.arrayListToArrayForPic(pics);
+        String urlsArray[] = ArraySort.arrayListToArrayForPic(urls);
 
 
         ArrayList<String> allPicsArray = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트
@@ -126,7 +125,7 @@ public class ViewFragment extends Fragment {
         imagePreview = rootView.findViewById(R.id.image_preview);
         for (String s : allPicsArray) {
             // 이미지뷰 생성
-            CircleImageView imageView = getCircleImageView(getContext());
+            CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
             // 이미지 String 형식에서 picn_ 또는 URLn_ 부분을 제거
             final String string_image = s.substring(s.indexOf('_') + 1);
@@ -154,7 +153,7 @@ public class ViewFragment extends Fragment {
                 Glide.with(getContext())
                         .load(string_image)
                         .apply(options)
-                        .into(imageView); // 라이브러리: https://github.com/bumptech/glide
+                        .into(imageView);
                 imagePreview.addView(imageView);
 
                 imageView.setOnClickListener(new View.OnClickListener() { // 사진 클릭시 큰 화면으로 볼 수 있음
@@ -165,7 +164,7 @@ public class ViewFragment extends Fragment {
                         Glide.with(getContext())
                                 .load(string_image)
                                 .apply(options)
-                                .into(bigPreview); // 라이브러리: https://github.com/bumptech/glide
+                                .into(bigPreview);
                     }
                 });
             }

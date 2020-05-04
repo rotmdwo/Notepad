@@ -1,5 +1,9 @@
 package org.techtown.notepad.view_modify;
 
+/*
+ * 사용된 라이브러리:
+ * https://github.com/bumptech/glide
+ */
 
 import android.content.Context;
 import android.content.Intent;
@@ -168,7 +172,7 @@ public class ModifyFragment extends Fragment {
                 });
 
                 RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
-                Glide.with(getContext()).load(stringImage).apply(options).into(imageView);  // 라이브러리: https://github.com/bumptech/glide
+                Glide.with(getContext()).load(stringImage).apply(options).into(imageView);
                 imageView.setId(picFound + urlFound + 1);
                 imagePreview.addView(imageView);
 
@@ -234,7 +238,7 @@ public class ModifyFragment extends Fragment {
                 final String url = URL.getText().toString();
                 final CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
-                Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() { // 라이브러리: https://github.com/bumptech/glide
+                Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         Toast.makeText(getContext(),"잘못된 이미지 URL입니다.\n다시 한 번 확인해 주세요.", Toast.LENGTH_SHORT).show();
@@ -300,7 +304,8 @@ public class ModifyFragment extends Fragment {
             imagePath = file.getAbsolutePath();
         }
 
-        if ((requestCode == LoadPicture.ATTACH_PICTURE || requestCode == LoadPicture.TAKE_PICTURE) && resultCode == RESULT_OK) {  // 사진첨부와 사진찍기의 공통된 처리부분
+        if ((requestCode == LoadPicture.ATTACH_PICTURE
+                || requestCode == LoadPicture.TAKE_PICTURE) && resultCode == RESULT_OK) {  // 사진첨부와 사진찍기의 공통된 처리부분
             // 사진이 돌아갔는지 확인하기 위해 사진의 정보 가져옴.
             try{
                 exif = new ExifInterface(imagePath);

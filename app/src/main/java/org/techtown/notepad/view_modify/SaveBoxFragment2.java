@@ -1,10 +1,7 @@
 package org.techtown.notepad.view_modify;
 
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,17 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.techtown.notepad.classes_for_methods.ArraySort;
 import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.R;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
-
-import static org.techtown.notepad.classes_for_methods.DataProcess.saveNote;
 
 public class SaveBoxFragment2 extends Fragment {
     SaveBoxFragment2 mFragment;
@@ -62,7 +52,7 @@ public class SaveBoxFragment2 extends Fragment {
                     DataProcess.deleteNote(name,getContext());
 
                     // 수정하는 시간을 Key값으로 새로운 내용을 저장
-                    saveNote(getContext(), title, content, (ModifyFragment.mFragment).pics, (ModifyFragment.mFragment).urls);
+                    DataProcess.saveNote(getContext(), title, content, (ModifyFragment.mFragment).pics, (ModifyFragment.mFragment).urls);
                     Toast.makeText(getActivity(), "저장 되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
@@ -78,7 +68,7 @@ public class SaveBoxFragment2 extends Fragment {
         Set<String> allNoteNmaes = DataProcess.restoreNames(getContext());
 
         allNoteNmaes.remove(name);
-        DataProcess.saveNames(allNoteNmaes,getContext());
+        DataProcess.saveNames(allNoteNmaes, getContext());
         return name;
     }
 }

@@ -28,9 +28,7 @@ import org.techtown.notepad.R;
 import org.techtown.notepad.classes_for_methods.TImeUtility;
 import org.techtown.notepad.view_modify.view_modifyActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
