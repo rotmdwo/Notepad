@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -37,7 +36,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
-import org.techtown.notepad.classes_for_methods.Array_sort;
+import org.techtown.notepad.classes_for_methods.ArraySort;
 import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.classes_for_methods.LoadPicture;
 import org.techtown.notepad.R;
@@ -45,7 +44,6 @@ import org.techtown.notepad.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -111,10 +109,8 @@ public class ModifyFragment extends Fragment {
         numOfPics = pics.size();
         numOfUrls = urls.size();
 
-        Array_sort array_sort = new Array_sort();
-        String pics_array[] = array_sort.arrayListToArrayForPic(pics);
-        String URLs_array[] = array_sort.arrayListToArrayForPic(urls);
-
+        String pics_array[] = ArraySort.arrayListToArrayForPic(pics);
+        String URLs_array[] = ArraySort.arrayListToArrayForPic(urls);
 
         // 정렬된 Array를 다시 ArrayList로 변환
         for(int k = 0 ; k < numOfPics ; k++){

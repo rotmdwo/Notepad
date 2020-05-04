@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 
-import org.techtown.notepad.classes_for_methods.Array_sort;
+import org.techtown.notepad.classes_for_methods.ArraySort;
 import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.list.ListItem;
 import org.techtown.notepad.list.ListItemAdapter;
@@ -83,8 +83,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
         // 최근 저장한 노트를 가장 위로 올라오게 하기 위해 Set -> Array로 만든 후 시간순으로 정렬 후 array의 뒤에서부터 가져온다.
         Set<String> allNames = DataProcess.restoreNames(this);
-        Array_sort array_sort = new Array_sort();
-        String allNames_array[] = array_sort.setToArray(allNames);
+        String allNames_array[] = ArraySort.setToArray(allNames);
 
         for (int l = allNames_array.length - 1 ; l >= 0 ; l--) {
             String title = null;
@@ -108,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                 }
             }
 
-            String pics_array[] = array_sort.arrayListToArrayForPic(pics);
-            String URLs_array[] = array_sort.arrayListToArrayForPic(URLs);
+            String pics_array[] = ArraySort.arrayListToArrayForPic(pics);
+            String URLs_array[] = ArraySort.arrayListToArrayForPic(URLs);
 
             if (URLs_array.length != 0 && URLs_array[0].substring(3,5).equals("1_")) {  // URL 이미지가 1번일 때
                 int location_ = URLs_array[0].indexOf('_');

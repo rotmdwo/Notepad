@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
-public class Array_sort {
-    public String[] arrayListToArrayForPic(ArrayList<String> arrayList) {
+public class ArraySort {
+    public static String[] arrayListToArrayForPic(ArrayList<String> arrayList) {
         // 사진의 순서를 정렬하기 위해 Set -> Array 형태로 변환
         String sorted_array[] = new String[arrayList.size()];
         int i = 0;
@@ -22,7 +22,7 @@ public class Array_sort {
         return sorted_array;
     }
 
-    public String[] setToArray(Set<String> set) {
+    public static String[] setToArray(Set<String> set) {
         String sorted_array[] = new String[set.size()];
         int k = 0;
         for (String s : set) {

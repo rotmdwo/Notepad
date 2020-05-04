@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import org.techtown.notepad.classes_for_methods.Array_sort;
+import org.techtown.notepad.classes_for_methods.ArraySort;
 import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.R;
 
@@ -100,9 +100,8 @@ public class ViewFragment extends Fragment {
             }
         }
 
-        Array_sort array_sort = new Array_sort();
-        String pics_array[] = array_sort.arrayListToArrayForPic(pics);
-        String URLs_array[] = array_sort.arrayListToArrayForPic(urls);
+        String pics_array[] = ArraySort.arrayListToArrayForPic(pics);
+        String URLs_array[] = ArraySort.arrayListToArrayForPic(urls);
 
 
         ArrayList<String> allPics_array = new ArrayList<>();  // 모든 사진을 String으로 담을 어레이 리스트

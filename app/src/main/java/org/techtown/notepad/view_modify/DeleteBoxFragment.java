@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import org.techtown.notepad.classes_for_methods.Array_sort;
+import org.techtown.notepad.classes_for_methods.ArraySort;
 import org.techtown.notepad.classes_for_methods.DataProcess;
 import org.techtown.notepad.R;
 
@@ -38,9 +38,6 @@ public class DeleteBoxFragment extends Fragment {
                 Intent intent = getActivity().getIntent();
                 String name = intent.getStringExtra("name");
                 Set<String> allNoteNmaes = DataProcess.restoreNames(getContext());
-
-                Array_sort array_sort = new Array_sort();
-                String allNames_array[] = array_sort.setToArray(allNoteNmaes);
 
                 allNoteNmaes.remove(name);
 
