@@ -18,8 +18,6 @@ import androidx.fragment.app.Fragment;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,17 +123,7 @@ public class ModifyFragment extends Fragment {
         for(int k = 1 ; k <= numOfUrls + numOfPics ; k++){
             if (pic_found < pics_array.length && pics_array[pic_found].substring(3,pics_array[pic_found].indexOf('_')).equals(Integer.toString(k))){
                 // 이미지뷰 생성
-                CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
-                params.rightMargin = margin;
-                params.gravity = Gravity.CENTER_VERTICAL;
-                imageView.setLayoutParams(params);
-                imageView.setBorderWidth(1);
-                imageView.setBackgroundColor(0xFFFFFFFF);
-                imageView.setBorderColor(0xFF000000);
+                CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
                 // 이미지 String 형식에서 picn_ 부분을 제거
                 String string_image = pics_array[pic_found].substring(pics_array[pic_found].indexOf('_')+1);
@@ -148,31 +136,8 @@ public class ModifyFragment extends Fragment {
                 imageView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        int id = v.getId();   // 해당 로컬사진의 ID 받아오기
-                        v.setVisibility(View.GONE);  // 해당 로컬사진을 미리보기에서 제거
-                        numOfPics--;
+                        numOfPics = LoadPicture.deletePicture(v, numOfPics, urls, pics);
 
-                        for(int i = 0; i < pics.size() ; i++){  // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
-                            int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                            if(num == id){
-                                pics.remove(i);
-                            }
-                        }
-
-                        for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                            int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                            String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
-                            if(num > id){
-                                pics.set(i, "pic"+(num-1)+"_"+string_image);
-                            }
-                        }
-                        for(int i = 0 ; i < urls.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                            int num = Integer.parseInt(urls.get(i).substring(3, urls.get(i).indexOf('_')));
-                            String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
-                            if(num > id){
-                                urls.set(i, "URL"+(num-1)+"_"+string_url);
-                            }
-                        }
                         return false;
                     }
                 });
@@ -186,17 +151,7 @@ public class ModifyFragment extends Fragment {
 
             } else if(url_found < URLs_array.length && URLs_array[url_found].substring(3,URLs_array[url_found].indexOf('_')).equals(Integer.toString(k))){
                 // 이미지뷰 생성
-                CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
-                params.rightMargin = margin;
-                params.gravity = Gravity.CENTER_VERTICAL;
-                imageView.setLayoutParams(params);
-                imageView.setBorderWidth(1);
-                imageView.setBackgroundColor(0xFFFFFFFF);
-                imageView.setBorderColor(0xFF000000);
+                CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
                 // 이미지 String 형식에서 URLn_ 부분을 제거
                 String string_image = URLs_array[url_found].substring(URLs_array[url_found].indexOf('_')+1);
@@ -204,31 +159,8 @@ public class ModifyFragment extends Fragment {
                 imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                     @Override
                     public boolean onLongClick(View v) {
-                        int id = v.getId();   // 해당 URL의 ID 받아오기
-                        v.setVisibility(View.GONE);  // 해당 URL을 미리보기에서 제거
-                        numOfUrls--;
+                        numOfUrls = LoadPicture.deleteUrl(v, numOfUrls, urls, pics);
 
-                        for(int i = 0; i < urls.size() ; i++){  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
-                            int num = Integer.parseInt(urls.get(i).substring(3, urls.get(i).indexOf('_')));
-                            if(num == id){
-                                urls.remove(i);
-                            }
-                        }
-
-                        for(int i = 0 ; i < pics.size() ; i++){  // 로컬 사진들을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                            int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                            String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
-                            if(num > id){
-                                pics.set(i, "pic"+(num-1)+"_"+string_image);
-                            }
-                        }
-                        for(int i = 0 ; i < urls.size() ; i++){  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                            int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
-                            String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
-                            if(num > id){
-                                urls.set(i, "URL"+(num-1)+"_"+string_url);
-                            }
-                        }
                         return false;
                     }
                 });
@@ -294,17 +226,7 @@ public class ModifyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final String url = URL.getText().toString();
-                final CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
-                int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-                int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-                int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
-                params.rightMargin = margin;
-                params.gravity = Gravity.CENTER_VERTICAL;
-                imageView.setLayoutParams(params);
-                imageView.setBorderWidth(1);
-                imageView.setBackgroundColor(0xFFFFFFFF);
-                imageView.setBorderColor(0xFF000000);
+                final CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
                 Glide.with(getContext()).load(url).addListener(new RequestListener<Drawable>() { // 라이브러리: https://github.com/bumptech/glide
                     @Override
@@ -318,31 +240,8 @@ public class ModifyFragment extends Fragment {
                         imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                             @Override
                             public boolean onLongClick(View v) {
-                                int id = v.getId();   // 해당 URL의 ID 받아오기
-                                v.setVisibility(View.GONE);  // 해당 URL을 미리보기에서 제거
-                                numOfUrls--;
+                                numOfUrls = LoadPicture.deleteUrl(v, numOfUrls, urls, pics);
 
-                                for (int i = 0 ; i < urls.size() ; i++) {  // URL들을 저장한 어레이 리스트에서 해당 URL을 삭제
-                                    int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
-                                    if(num == id){
-                                        urls.remove(i);
-                                    }
-                                }
-
-                                for (int i = 0 ; i < pics.size() ; i++) {  // 로컬 사진들을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                                    int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                                    String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
-                                    if (num > id) {
-                                        pics.set(i, "pic"+(num-1)+"_"+string_image);
-                                    }
-                                }
-                                for (int i = 0 ; i < urls.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 URL보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                                    int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
-                                    String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
-                                    if (num > id) {
-                                        urls.set(i, "URL"+(num-1)+"_"+string_url);
-                                    }
-                                }
                                 return false;
                             }
                         });
@@ -373,7 +272,7 @@ public class ModifyFragment extends Fragment {
         ExifInterface exif = null;
         String imagePath = null;
 
-        if (requestCode == 101 && resultCode == RESULT_OK) {  // 사진첨부 처리부분
+        if (requestCode == LoadPicture.ATTACH_PICTURE && resultCode == RESULT_OK) {  // 사진첨부 처리부분
             Uri file;
 
             file = data.getData();
@@ -385,11 +284,11 @@ public class ModifyFragment extends Fragment {
             cursor.close();
         }
 
-        if (requestCode == 103 && resultCode == RESULT_OK) {  // 사진찍기 처리부분
+        if (requestCode == LoadPicture.TAKE_PICTURE && resultCode == RESULT_OK) {  // 사진찍기 처리부분
             imagePath = file.getAbsolutePath();
         }
 
-        if ((requestCode == 101 || requestCode == 103) && resultCode == RESULT_OK) {  // 사진첨부와 사진찍기의 공통된 처리부분
+        if ((requestCode == LoadPicture.ATTACH_PICTURE || requestCode == LoadPicture.TAKE_PICTURE) && resultCode == RESULT_OK) {  // 사진첨부와 사진찍기의 공통된 처리부분
             // 사진이 돌아갔는지 확인하기 위해 사진의 정보 가져옴.
             try{
                 exif = new ExifInterface(imagePath);
@@ -397,18 +296,7 @@ public class ModifyFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            // 메모리 초과 문제 해결하기 위해 이미지 압축
-            LoadPicture loadPicture = new LoadPicture();
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(imagePath,options);
-            options.inSampleSize = loadPicture.ResizeRatio(options.outWidth,options.outHeight,500, 500);
-            options.inJustDecodeBounds = false;
-
-            // 사진이 회전 되어있다면 정방향으로 돌림
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,1);
-            image = BitmapFactory.decodeFile(imagePath, options);
-            image = loadPicture.rotate(image, loadPicture.exifOrientationToDegrees(orientation));
+            image = LoadPicture.compressPicture(imagePath, exif);
 
             // 사진을 String 형태로 전환
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -416,18 +304,9 @@ public class ModifyFragment extends Fragment {
             byte[] byteArray = bytes.toByteArray();
             pic = Base64.encodeToString(byteArray,Base64.DEFAULT);
 
+
             // 이미지 미리보기 띄우기
-            CircleImageView imageView = new CircleImageView(getContext()); // 라이브러리: https://github.com/hdodenhof/CircleImageView
-            int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-            int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics());
-            params.rightMargin = margin;
-            params.gravity = Gravity.CENTER_VERTICAL;
-            imageView.setLayoutParams(params);
-            imageView.setBorderWidth(1);
-            imageView.setBackgroundColor(0xFFFFFFFF);
-            imageView.setBorderColor(0xFF000000);
+            CircleImageView imageView = LoadPicture.getCircleImageView(getContext());
 
             imageView.setImageBitmap(image);
             imageView.setId(numOfUrls+numOfPics+1);
@@ -440,31 +319,8 @@ public class ModifyFragment extends Fragment {
             imageView.setOnLongClickListener(new View.OnLongClickListener() {  // 사진을 길게 눌렀을시 첨부를 취소
                 @Override
                 public boolean onLongClick(View v) {
-                    int id = v.getId();   // 해당 로컬사진의 ID 받아오기
-                    v.setVisibility(View.GONE);  // 해당 로컬사진을 미리보기에서 제거
-                    numOfPics--;
+                    numOfPics = LoadPicture.deletePicture(v, numOfPics, urls, pics);
 
-                    for(int i = 0; i < pics.size() ; i++){  // 로컬사진들을 저장한 어레이 리스트에서 해당 로컬사진을 삭제
-                        int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                        if (num == id) {
-                            pics.remove(i);
-                        }
-                    }
-
-                    for (int i = 0 ; i < pics.size() ; i++) {  // 로컬 사진들을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                        int num = Integer.parseInt(pics.get(i).substring(3,pics.get(i).indexOf('_')));
-                        String string_image = pics.get(i).substring(pics.get(i).indexOf('_')+1);
-                        if(num > id){
-                            pics.set(i, "pic"+(num-1)+"_"+string_image);
-                        }
-                    }
-                    for (int i = 0 ; i < urls.size() ; i++) {  // URL을 저장한 어레이 리스트에서 해당 로컬사진보다 뒤에 있던 사진들의 네이밍 넘버를 하나 씩 떙김
-                        int num = Integer.parseInt(urls.get(i).substring(3,urls.get(i).indexOf('_')));
-                        String string_url = urls.get(i).substring(urls.get(i).indexOf('_')+1);
-                        if (num > id) {
-                            urls.set(i, "URL"+(num-1)+"_"+string_url);
-                        }
-                    }
                     return false;
                 }
             });
