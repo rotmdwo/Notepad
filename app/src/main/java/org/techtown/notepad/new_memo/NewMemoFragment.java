@@ -50,19 +50,18 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class NewMemoFragment extends Fragment {
-    EditText title, content, URL;
-    static NewMemoFragment mFragment;
-    LinearLayout imagePreview;
-    File file;
-    Context newMemoContext;
+    private EditText title, content, URL;
+    private LinearLayout imagePreview;
+    private File file;
+    private Context newMemoContext;
 
     // 현재 노트에 첨부한 로컬사진의 byte to string 형식과 url 링크 저장
-    ArrayList<String> pics = new ArrayList<>();
-    ArrayList<String> urls = new ArrayList<>();
+    private ArrayList<String> pics = new ArrayList<>();
+    private ArrayList<String> urls = new ArrayList<>();
 
     // 현재 노트에 로컬사진과 url 사진이 몇 개 있는지 저장
-    int numOfPics = 0;
-    int numOfUrls = 0;
+    private int numOfPics = 0;
+    private int numOfUrls = 0;
 
     public NewMemoFragment(Context newMemoContext) {
         this.newMemoContext = newMemoContext;
@@ -73,9 +72,8 @@ public class NewMemoFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_new_memo, container, false);
-        mFragment = this;
-        imagePreview = rootView.findViewById(R.id.image_preview);
 
+        imagePreview = rootView.findViewById(R.id.image_preview);
         title = rootView.findViewById(R.id.title);
         content = rootView.findViewById(R.id.content);
         URL = rootView.findViewById(R.id.URL);
@@ -95,6 +93,11 @@ public class NewMemoFragment extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((NewMemoActivity) newMemoContext).title = title.getText().toString();
+                ((NewMemoActivity) newMemoContext).content = content.getText().toString();
+                ((NewMemoActivity) newMemoContext).pics = pics;
+                ((NewMemoActivity) newMemoContext).urls = urls;
+
                 if(title.getText().toString().equals("") || content.getText().toString().equals("")){
                     Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.", Toast.LENGTH_SHORT)
                             .show();

@@ -28,8 +28,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener {
-    public RecyclerView recyclerView;
-    public ListItemAdapter adapter;
+    private RecyclerView recyclerView;
+    private ListItemAdapter adapter;
 
     final int AUTO_PERMISSION = 102;
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
 
         // 최근 저장한 노트를 가장 위로 올라오게 하기 위해 Set -> Array로 만든 후 시간순으로 정렬 후 array의 뒤에서부터 가져온다.
         Set<String> allNames = DataProcess.restoreNames(this);
-        String allNamesArray[] = ArraySort.setToArray(allNames);
+        String[] allNamesArray = ArraySort.setToArray(allNames);
 
         for (int l = allNamesArray.length - 1 ; l >= 0 ; l--) {
             String title = null;
@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
                 }
             }
 
-            String picsArray[] = ArraySort.arrayListToArrayForPic(pics);
-            String urlsArray[] = ArraySort.arrayListToArrayForPic(urls);
+            String[] picsArray = ArraySort.arrayListToArrayForPic(pics);
+            String[] urlsArray = ArraySort.arrayListToArrayForPic(urls);
 
             if (urlsArray.length != 0 && urlsArray[0].substring(3, 5).equals("1_")) {  // URL 이미지가 1번일 때
                 int location_ = urlsArray[0].indexOf('_');

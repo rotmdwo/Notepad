@@ -13,8 +13,8 @@ import org.techtown.notepad.R;
 
 
 public class BackBoxFragment extends Fragment {
-    BackBoxFragment backBoxFragment;
-    Context newMemoContext;
+    private BackBoxFragment backBoxFragment;
+    private Context newMemoContext;
 
     public BackBoxFragment(Context newMemoContext) {
         this.newMemoContext = newMemoContext;

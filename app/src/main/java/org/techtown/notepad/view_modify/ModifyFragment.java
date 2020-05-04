@@ -55,19 +55,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 public class ModifyFragment extends Fragment {
-    EditText title, content, URL;
+    private EditText title, content, URL;
     private LinearLayout imagePreview;
     private File file;
-    public static ModifyFragment mFragment;
     private Context viewModifyContext;
 
     // 현재 노트에 첨부한 로컬사진의 byte to string 형식과 url 링크 저장
-    ArrayList<String> pics = new ArrayList<>();
-    ArrayList<String> urls = new ArrayList<>();
+    private ArrayList<String> pics = new ArrayList<>();
+    private ArrayList<String> urls = new ArrayList<>();
 
     // 현재 노트에 로컬사진과 url 사진이 몇 개 있는지 저장
-    int numOfPics = 0;
-    int numOfUrls = 0;
+    private int numOfPics = 0;
+    private int numOfUrls = 0;
 
     public ModifyFragment(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;
@@ -77,8 +76,6 @@ public class ModifyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_modify, container, false);
-
-        mFragment = this;
 
         imagePreview = rootView.findViewById(R.id.image_preview);
         URL = rootView.findViewById(R.id.URL);
@@ -96,13 +93,13 @@ public class ModifyFragment extends Fragment {
         content.setText(contentString);
 
         // 노트에 저장된 사진들을 불러옴
-        Set<String> note = DataProcess.restoreNote(name,getContext());
+        Set<String> note = DataProcess.restoreNote(name, getContext());
         Iterator<String> iteratorNote = note.iterator();
         while (iteratorNote.hasNext()) {
             String temp = iteratorNote.next();
-            if (temp.substring(0,3).equals("pic")) {
+            if (temp.substring(0, 3).equals("pic")) {
                 pics.add(temp);
-            } else if (temp.substring(0,3).equals("URL")) {
+            } else if (temp.substring(0, 3).equals("URL")) {
                 urls.add(temp);
             }
         }
@@ -111,8 +108,8 @@ public class ModifyFragment extends Fragment {
         numOfPics = pics.size();
         numOfUrls = urls.size();
 
-        String picsArray[] = ArraySort.arrayListToArrayForPic(pics);
-        String urlsArray[] = ArraySort.arrayListToArrayForPic(urls);
+        String[] picsArray = ArraySort.arrayListToArrayForPic(pics);
+        String[] urlsArray = ArraySort.arrayListToArrayForPic(urls);
 
         // 정렬된 Array를 다시 ArrayList로 변환
         for(int k = 0 ; k < numOfPics ; k++){
@@ -194,11 +191,17 @@ public class ModifyFragment extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((view_modifyActivity) viewModifyContext).title = title.getText().toString();
+                ((view_modifyActivity) viewModifyContext).content = content.getText().toString();
+                ((view_modifyActivity) viewModifyContext).pics = pics;
+                ((view_modifyActivity) viewModifyContext).urls = urls;
+
                 if (title.getText().toString().equals("") || content.getText().toString().equals("")) {
                     Toast.makeText(getContext(),"제목과 내용 모두 입력하셔야 합니다.",Toast.LENGTH_SHORT).show();
                 } else {
                     ((view_modifyActivity) viewModifyContext).manager
-                            .beginTransaction().show(((view_modifyActivity) viewModifyContext).frg_savebox2)
+                            .beginTransaction()
+                            .show(((view_modifyActivity) viewModifyContext).frg_savebox2)
                             .commit();
                 }
             }

@@ -13,8 +13,8 @@ import org.techtown.notepad.R;
 
 
 public class BackBoxFragment2 extends Fragment {
-    BackBoxFragment2 mFragment;
-    Context viewModifyContext;
+    private BackBoxFragment2 mFragment;
+    private Context viewModifyContext;
 
     public BackBoxFragment2(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;

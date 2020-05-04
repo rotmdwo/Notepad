@@ -1,11 +1,11 @@
 package org.techtown.notepad.list;
 
 public class ListItem {
-    Boolean isWebImage;
-    String imagePath;
-    String title;
-    String content;
-    String time;
+    private Boolean isWebImage;
+    private String imagePath;
+    private String title;
+    private String content;
+    private String time;
 
     public ListItem(Boolean isWebImage, String imagePath, String title, String content, String time) {
         this.isWebImage = isWebImage;

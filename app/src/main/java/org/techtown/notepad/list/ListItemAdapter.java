@@ -34,7 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHolder> {
     private ArrayList<ListItem> items = new ArrayList<>();
-    Context mainContext;
+    private Context mainContext;
 
     // 생성자를 만들 때 Context를 안 넘겨주면 프래그먼트 나갔다가 들어올 때 마다 리사이클러뷰에 중복으로 쌓이는 버그 생김
     public ListItemAdapter(Context context) {
@@ -99,10 +99,10 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
 
                 RequestOptions options = new RequestOptions().error(R.drawable.wrongurl);
                 Glide.with(mainContext)
-                        .load(item.imagePath)
+                        .load(item.getImagePath())
                         .apply(options)
                         .into(imageView);
-            } else if (item.imagePath.equals("NO")) {  // 저장된 이미지가 없다면
+            } else if (item.getImagePath().equals("NO")) {  // 저장된 이미지가 없다면
                 Drawable noImage = mainContext.getDrawable(R.drawable.noimage);
                 imageView.setImageDrawable(noImage);
             }

@@ -12,8 +12,8 @@ import android.widget.Button;
 import org.techtown.notepad.R;
 
 public class ModifyBoxFragment extends Fragment {
-    ModifyBoxFragment mFragment;
-    Context viewModifyContext;
+    private ModifyBoxFragment mFragment;
+    private Context viewModifyContext;
 
     public ModifyBoxFragment(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;

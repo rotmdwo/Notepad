@@ -16,9 +16,9 @@ import org.techtown.notepad.R;
 
 
 public class SaveBoxFragment extends Fragment {
-    SaveBoxFragment saveBoxFragment;
-    Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
-    Context newMemoContext;
+    private SaveBoxFragment saveBoxFragment;
+    private Boolean save_already_clicked = false; // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
+    private Context newMemoContext;
 
     public SaveBoxFragment(Context newMemoContext) {
         this.newMemoContext = newMemoContext;
@@ -48,10 +48,10 @@ public class SaveBoxFragment extends Fragment {
             public void onClick(View v) {
                 if (save_already_clicked == false) { // 저장버튼 두 번 눌러서 저장 2번 되는 걸 방지
                     save_already_clicked = true;
-                    String title = (NewMemoFragment.mFragment).title.getText().toString();
-                    String content = (NewMemoFragment.mFragment).content.getText().toString();
+                    String title = ((NewMemoActivity) newMemoContext).title;
+                    String content = ((NewMemoActivity) newMemoContext).content;
 
-                    DataProcess.saveNote(getContext(), title,content,(NewMemoFragment.mFragment).pics, (NewMemoFragment.mFragment).urls);
+                    DataProcess.saveNote(getContext(), title,content, ((NewMemoActivity) newMemoContext).pics, ((NewMemoActivity) newMemoContext).urls);
                     Toast.makeText(getActivity(),"저장 되었습니다.", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
 

@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import org.techtown.notepad.R;
 
+import java.util.ArrayList;
+
 public class view_modifyActivity extends AppCompatActivity {
     FragmentManager manager;
     ViewFragment frg_view;
@@ -15,6 +17,10 @@ public class view_modifyActivity extends AppCompatActivity {
     DeleteBoxFragment frg_deletebox;
     BackBoxFragment2 frg_backbox2;
     SaveBoxFragment2 frg_savebox2;
+    String title;
+    String content;
+    ArrayList<String> pics = new ArrayList<>();
+    ArrayList<String> urls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

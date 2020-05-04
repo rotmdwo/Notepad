@@ -16,8 +16,8 @@ import org.techtown.notepad.R;
 import java.util.Set;
 
 public class DeleteBoxFragment extends Fragment {
-    DeleteBoxFragment mFragment;
-    Context viewModifyContext;
+    private DeleteBoxFragment mFragment;
+    private Context viewModifyContext;
 
     public DeleteBoxFragment(Context viewModifyContext) {
         this.viewModifyContext = viewModifyContext;

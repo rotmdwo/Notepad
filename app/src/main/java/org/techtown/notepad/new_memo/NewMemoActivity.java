@@ -7,11 +7,17 @@ import android.widget.Toast;
 
 import org.techtown.notepad.R;
 
+import java.util.ArrayList;
+
 public class NewMemoActivity extends AppCompatActivity {
     FragmentManager manager;
     BackBoxFragment frg_backbox;
     SaveBoxFragment frg_savebox;
     NewMemoFragment frg_newmemo;
+    String title;
+    String content;
+    ArrayList<String> pics = new ArrayList<>();
+    ArrayList<String> urls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
