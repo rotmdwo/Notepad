@@ -1,6 +1,25 @@
 # Notepad
-This repository is for Line Plus Challenge
 
+<h2> 앱 사용법 </h2>
+<p> 홈 화면은 메모리스트로 구성되며, 우측상단의 새메모 버튼을 눌러 새로운 메모를 쓰거나, 리스트에서 노트를 선택해 상세하게 볼 수 있다.</p>
+<p> 새 글을 쓰거나 수정할 때는 이미지를 길게 눌러 첨부취소 할 수 있다.</p>
+<p> 메모상세보기에서는 이미지를 클릭해 큰 화면으로 자세히 볼 수 있다.</p>
+
+<br>
+
+<h2> 스크린샷 </h2>
+<h3> 메모 작성의 예 </h3>
+<div>
+<img width = "360" height = "690" src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/Screenshot_20200513-232606.jpg?raw=true">
+<img width = "360" height = "690" src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/Screenshot_20200513-232803.jpg?raw=true">
+<img width = "360" height = "690" src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/Screenshot_20200513-232835.jpg?raw=true">
+</div>
+<br><br>
+<div>
+<h3> 메모 보기의 예 </h3>
+<img width = "360" height = "690" src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/Screenshot_20200513-232645.jpg?raw=true">
+<img width = "360" height = "690" src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/Screenshot_20200513-232657.jpg?raw=true">
+  </div>
 <br><br>
 
 <h2> 사용한 라이브러리 </h2>
@@ -22,10 +41,7 @@ This repository is for Line Plus Challenge
 <p> 리스트에 가장 먼저 첨부한 사진을 불러오거나, 메모상세보기에서 사진을 순서대로 불러올 때는 사진의 태그를 비교정렬 하여 순서대로 불러온다.</p>
 
 
-<h2> 앱 사용법 </h2>
-<p> 홈 화면은 메모리스트로 구성되며, 우측상단의 새메모 버튼을 눌러 새로운 메모를 쓰거나, 리스트에서 노트를 선택해 상세하게 볼 수 있다.</p>
-<p> 새 글을 쓰거나 수정할 때는 이미지를 길게 눌러 첨부취소 할 수 있다.</p>
-<p> 메모상세보기에서는 이미지를 클릭해 큰 화면으로 자세히 볼 수 있다.</p>
+
 
 <h2> Result </h2>
 <img src="https://github.com/rotmdwo/Notepad/blob/master/screenshot/result1.jpg?raw=true">
